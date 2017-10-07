@@ -23,29 +23,29 @@
 
 - (id)init
 {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-		[NSNumber numberWithInt:10],
-		@"displayNum",
-		[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:9],[NSNumber numberWithLong:1179648],nil] forKeys:[NSArray arrayWithObjects:@"keyCode",@"modifierFlags",nil]],
-		@"ShortcutRecorder mainHotkey",
-		[NSNumber numberWithInt:40],
-		@"rememberNum",
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithInt:10],
+        @"displayNum",
+        [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:9],[NSNumber numberWithLong:1179648],nil] forKeys:[NSArray arrayWithObjects:@"keyCode",@"modifierFlags",nil]],
+        @"ShortcutRecorder mainHotkey",
+        [NSNumber numberWithInt:40],
+        @"rememberNum",
         [NSNumber numberWithInt:40],
         @"favoritesRememberNum",
-		[NSNumber numberWithInt:1],
-		@"savePreference",
-		[NSNumber numberWithInt:0],
-		@"menuIcon",
-		[NSNumber numberWithFloat:.25],
-		@"bezelAlpha",
-		[NSNumber numberWithBool:YES],
-		@"stickyBezel",
-		[NSNumber numberWithBool:NO],
-		@"wraparoundBezel",
-		[NSNumber numberWithBool:NO],// No by default
-		@"loadOnStartup",
-		[NSNumber numberWithBool:YES], 
-		@"menuSelectionPastes",
+        [NSNumber numberWithInt:1],
+        @"savePreference",
+        [NSNumber numberWithInt:0],
+        @"menuIcon",
+        [NSNumber numberWithFloat:.25],
+        @"bezelAlpha",
+        [NSNumber numberWithBool:YES],
+        @"stickyBezel",
+        [NSNumber numberWithBool:NO],
+        @"wraparoundBezel",
+        [NSNumber numberWithBool:NO],// No by default
+        @"loadOnStartup",
+        [NSNumber numberWithBool:YES],
+        @"menuSelectionPastes",
         // Flycut new options
         [NSNumber numberWithFloat:500.0],
         @"bezelWidth",
@@ -55,16 +55,16 @@
         @"store",
         [NSNumber numberWithBool:YES],
         @"skipPasswordFields",
-		[NSNumber numberWithBool:YES],
-		@"skipPboardTypes",
-		@"PasswordPboardType",
-		@"skipPboardTypesList",
-		[NSNumber numberWithBool:NO],
-		@"skipPasswordLengths",
-		@"12, 20, 32",
-		@"skipPasswordLengthsList",
-		[NSNumber numberWithBool:NO],
-		@"revealPasteboardTypes",
+        [NSNumber numberWithBool:YES],
+        @"skipPboardTypes",
+        @"PasswordPboardType",
+        @"skipPboardTypesList",
+        [NSNumber numberWithBool:NO],
+        @"skipPasswordLengths",
+        @"12, 20, 32",
+        @"skipPasswordLengthsList",
+        [NSNumber numberWithBool:NO],
+        @"revealPasteboardTypes",
         [NSNumber numberWithBool:NO],
         @"removeDuplicates",
         [NSNumber numberWithBool:NO],
@@ -78,71 +78,71 @@
         [NSNumber numberWithBool:YES],
         @"displayClippingSource",
         nil]];
-	return [super init];
+    return [super init];
 }
 
 - (void)awakeFromNib
 {
-	[self buildAppearancesPreferencePanel];
+    [self buildAppearancesPreferencePanel];
 
-	// We no longer get autosave from ShortcutRecorder, so let's set the recorder by hand
-	if ( [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ShortcutRecorder mainHotkey"] ) {
-		[mainRecorder setKeyCombo:SRMakeKeyCombo([[[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ShortcutRecorder mainHotkey"] objectForKey:@"keyCode"] intValue],
-												 [[[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ShortcutRecorder mainHotkey"] objectForKey:@"modifierFlags"] intValue] )
-		];
-	};
-	// Initialize the FlycutStore
-	clippingStore = [[FlycutStore alloc] initRemembering:[[NSUserDefaults standardUserDefaults] integerForKey:@"rememberNum"]
-											   displaying:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayNum"]
-										withDisplayLength:_DISPLENGTH];
+    // We no longer get autosave from ShortcutRecorder, so let's set the recorder by hand
+    if ( [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ShortcutRecorder mainHotkey"] ) {
+        [mainRecorder setKeyCombo:SRMakeKeyCombo([[[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ShortcutRecorder mainHotkey"] objectForKey:@"keyCode"] intValue],
+                                                 [[[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ShortcutRecorder mainHotkey"] objectForKey:@"modifierFlags"] intValue] )
+        ];
+    };
+    // Initialize the FlycutStore
+    clippingStore = [[FlycutStore alloc] initRemembering:[[NSUserDefaults standardUserDefaults] integerForKey:@"rememberNum"]
+                                               displaying:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayNum"]
+                                        withDisplayLength:_DISPLENGTH];
     favoritesStore = [[FlycutStore alloc] initRemembering:[[NSUserDefaults standardUserDefaults] integerForKey:@"favoritesRememberNum"]
                                                displaying:[[NSUserDefaults standardUserDefaults] integerForKey:@"displayNum"]
                                         withDisplayLength:_DISPLENGTH];
     stashedStore = NULL;
     [bezel setColor:NO];
     
-	// Set up the bezel window
-	[self setupBezel:nil];
+    // Set up the bezel window
+    [self setupBezel:nil];
 
-	// Set up the bezel date formatter
-	dateFormat = [[NSDateFormatter alloc] init];
-	[dateFormat setDateFormat:@"EEEE, MMMM dd 'at' h:mm a"];
+    // Set up the bezel date formatter
+    dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"EEEE, MMMM dd 'at' h:mm a"];
 
 
-	// Create our pasteboard interface
+    // Create our pasteboard interface
     jcPasteboard = [NSPasteboard generalPasteboard];
     [jcPasteboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
-    pbCount = [[NSNumber numberWithInt:[jcPasteboard changeCount]] retain];
+    pbCount = [NSNumber numberWithInt:[jcPasteboard changeCount]];
 
-	// Build the statusbar menu
-    statusItem = [[[NSStatusBar systemStatusBar]
-            statusItemWithLength:NSVariableStatusItemLength] retain];
+    // Build the statusbar menu
+    statusItem = [[NSStatusBar systemStatusBar]
+            statusItemWithLength:NSVariableStatusItemLength];
     [statusItem setHighlightMode:YES];
     [self switchMenuIconTo: [[NSUserDefaults standardUserDefaults] integerForKey:@"menuIcon"]];
-	[statusItem setMenu:jcMenu];
+    [statusItem setMenu:jcMenu];
     [jcMenu setDelegate:self];
     jcMenuBaseItemsCount = [[[[jcMenu itemArray] reverseObjectEnumerator] allObjects] count];
     [statusItem setEnabled:YES];
-	
+    
     // If our preferences indicate that we are saving, load the dictionary from the saved plist
     // and use it to get everything set up.
-	if ( [[NSUserDefaults standardUserDefaults] integerForKey:@"savePreference"] >= 1 ) {
-		[self loadEngineFromPList];
-	}
-	// Build our listener timer
-    pollPBTimer = [[NSTimer scheduledTimerWithTimeInterval:(1.0)
-													target:self
-												  selector:@selector(pollPB:)
-												  userInfo:nil
-												   repeats:YES] retain];
-	
+    if ( [[NSUserDefaults standardUserDefaults] integerForKey:@"savePreference"] >= 1 ) {
+        [self loadEngineFromPList];
+    }
+    // Build our listener timer
+    pollPBTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0)
+                                                    target:self
+                                                  selector:@selector(pollPB:)
+                                                  userInfo:nil
+                                                   repeats:YES];
+    
     // Finish up
-	srTransformer = [[[SRKeyCodeTransformer alloc] init] retain];
-    pbBlockCount = [[NSNumber numberWithInt:0] retain];
+    srTransformer = [[SRKeyCodeTransformer alloc] init];
+    pbBlockCount = [NSNumber numberWithInt:0];
     [pollPBTimer fire];
 
-	// Stack position starts @ 0 by default
-	stackPosition = favoritesStackPosition = stashedStackPosition = 0;
+    // Stack position starts @ 0 by default
+    stackPosition = favoritesStackPosition = stashedStackPosition = 0;
     
     
     // The load-on-startup check can be really slow, so this will be dispatched out so our thread isn't blocked.
@@ -174,8 +174,7 @@
             
             // Reload pbCount with the current changeCount
             // Probably poor coding technique, but pollPB should be the only thing messing with pbCount, so it should be okay
-            [pbCount release];
-            pbCount = [[NSNumber numberWithInt:[jcPasteboard changeCount]] retain];
+            pbCount = [NSNumber numberWithInt:[jcPasteboard changeCount]];
         }
         disableStore = [self toggleMenuIconDisabled];
     }
@@ -194,8 +193,8 @@
         if ( [currRunningApp rangeOfString:@"Flycut"].location == NSNotFound )
         {
             // We haven't activated Flycut yet.
-            currentRunningApplication = [currApp retain]; // Remember what app we came from.
-            menuOpenEvent = [event retain]; // So we can send it again to open the menu.
+            currentRunningApplication = currApp; // Remember what app we came from.
+            menuOpenEvent = event; // So we can send it again to open the menu.
             [menu cancelTracking]; // Prevent the menu from displaying, since activateIgnoringOtherApps would close it anyway.
             [NSApp activateIgnoringOtherApps: YES]; // Required to make the search field firstResponder any good.
             [self performSelector:@selector(reopenMenu) withObject:nil afterDelay:0.2 inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]]; // Because we really do want the menu open.
@@ -223,7 +222,6 @@
         if (!isBezelDisplayed)
             [currentRunningApplication activateWithOptions: NSApplicationActivateIgnoringOtherApps];
         // Paste from the bezel in this scenario works fine, so release and forget this resource in both cases.
-        [currentRunningApplication release];
         currentRunningApplication = nil;
     }
 }
@@ -252,7 +250,6 @@
 - (void)reopenMenu
 {
     [NSApp sendEvent:menuOpenEvent];
-    [menuOpenEvent release];
     menuOpenEvent = nil;
 }
 
@@ -264,7 +261,6 @@
 
 -(IBAction) activateAndOrderFrontStandardAboutPanel:(id)sender
 {
-    [currentRunningApplication release];
     currentRunningApplication = nil; // So it doesn't get pulled foreground atop the about panel.
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
     [[NSApplication sharedApplication] orderFrontStandardAboutPanel:sender];
@@ -272,26 +268,26 @@
 
 -(IBAction) setBezelAlpha:(id)sender
 {
-	// In a masterpiece of poorly-considered design--because I want to eventually 
-	// allow users to select from a variety of bezels--I've decided to create the
-	// bezel programatically, meaning that I have to go through AppController as
-	// a cutout to allow the user interface to interact w/the bezel.
-	[bezel setAlpha:[sender floatValue]];
+    // In a masterpiece of poorly-considered design--because I want to eventually
+    // allow users to select from a variety of bezels--I've decided to create the
+    // bezel programatically, meaning that I have to go through AppController as
+    // a cutout to allow the user interface to interact w/the bezel.
+    [bezel setAlpha:[sender floatValue]];
 }
 
 -(IBAction) setBezelWidth:(id)sender
 {
     NSSize bezelSize = NSMakeSize([sender floatValue], bezel.frame.size.height);
-	NSRect windowFrame = NSMakeRect( 0, 0, bezelSize.width, bezelSize.height);
-	[bezel setFrame:windowFrame display:NO];
+    NSRect windowFrame = NSMakeRect( 0, 0, bezelSize.width, bezelSize.height);
+    [bezel setFrame:windowFrame display:NO];
     [bezel trueCenter];
 }
 
 -(IBAction) setBezelHeight:(id)sender
 {
     NSSize bezelSize = NSMakeSize(bezel.frame.size.width, [sender floatValue]);
-	NSRect windowFrame = NSMakeRect( 0, 0, bezelSize.width, bezelSize.height);
-	[bezel setFrame:windowFrame display:NO];
+    NSRect windowFrame = NSMakeRect( 0, 0, bezelSize.width, bezelSize.height);
+    [bezel setFrame:windowFrame display:NO];
     [bezel trueCenter];
 }
 
@@ -334,33 +330,33 @@
 
 -(IBAction) setRememberNumPref:(id)sender
 {
-	int choice;
-	int newRemember = [sender intValue];
-	if ( newRemember < [clippingStore jcListCount] &&
-		 ! issuedRememberResizeWarning &&
-		 ! [[NSUserDefaults standardUserDefaults] boolForKey:@"stifleRememberResizeWarning"]
-		 ) {
-		choice = NSRunAlertPanel(@"Resize Stack", 
-								 @"Resizing the stack to a value below its present size will cause clippings to be lost.",
-								 @"Resize", @"Cancel", @"Don't Warn Me Again");
-		if ( choice == NSAlertAlternateReturn ) {
-			[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:[clippingStore jcListCount]]
-													 forKey:@"rememberNum"];
-			[self updateMenu];
-			return;
-		} else if ( choice == NSAlertOtherReturn ) {
-			[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES]
-													 forKey:@"stifleRememberResizeWarning"];
-		} else {
-			issuedRememberResizeWarning = YES;
-		}
-	}
-	if ( newRemember < [[NSUserDefaults standardUserDefaults] integerForKey:@"displayNum"] ) {
-		[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:newRemember]
-												 forKey:@"displayNum"];
-	}
-	[clippingStore setRememberNum:newRemember];
-	[self updateMenu];
+    int choice;
+    int newRemember = [sender intValue];
+    if ( newRemember < [clippingStore jcListCount] &&
+         ! issuedRememberResizeWarning &&
+         ! [[NSUserDefaults standardUserDefaults] boolForKey:@"stifleRememberResizeWarning"]
+         ) {
+        choice = NSRunAlertPanel(@"Resize Stack",
+                                 @"Resizing the stack to a value below its present size will cause clippings to be lost.",
+                                 @"Resize", @"Cancel", @"Don't Warn Me Again");
+        if ( choice == NSAlertAlternateReturn ) {
+            [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:[clippingStore jcListCount]]
+                                                     forKey:@"rememberNum"];
+            [self updateMenu];
+            return;
+        } else if ( choice == NSAlertOtherReturn ) {
+            [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES]
+                                                     forKey:@"stifleRememberResizeWarning"];
+        } else {
+            issuedRememberResizeWarning = YES;
+        }
+    }
+    if ( newRemember < [[NSUserDefaults standardUserDefaults] integerForKey:@"displayNum"] ) {
+        [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:newRemember]
+                                                 forKey:@"displayNum"];
+    }
+    [clippingStore setRememberNum:newRemember];
+    [self updateMenu];
 }
 
 -(IBAction) setFavoritesRememberNumPref:(id)sender
@@ -373,176 +369,176 @@
 
 -(IBAction) setDisplayNumPref:(id)sender
 {
-	[self updateMenu];
+    [self updateMenu];
 }
 
 -(NSTextField*) preferencePanelSliderLabelForText:(NSString*)text aligned:(NSTextAlignment)alignment andFrame:(NSRect)frame
 {
-	NSTextField *newLabel = [[NSTextField alloc] initWithFrame:frame];
-	newLabel.editable = NO;
-	[newLabel setAlignment:alignment];
-	[newLabel setBordered:NO];
-	[newLabel setDrawsBackground:NO];
-	[newLabel setFont:[NSFont labelFontOfSize:10]];
-	[newLabel setStringValue:text];
-	return newLabel;
+    NSTextField *newLabel = [[NSTextField alloc] initWithFrame:frame];
+    newLabel.editable = NO;
+    [newLabel setAlignment:alignment];
+    [newLabel setBordered:NO];
+    [newLabel setDrawsBackground:NO];
+    [newLabel setFont:[NSFont labelFontOfSize:10]];
+    [newLabel setStringValue:text];
+    return newLabel;
 }
 
 -(NSBox*) preferencePanelSliderRowForText:(NSString*)title withTicks:(int)ticks minText:(NSString*)minText maxText:(NSString*)maxText minValue:(double)min maxValue:(double)max frameMaxY:(int)frameMaxY binding:(NSString*)keyPath action:(SEL)action
 {
-	NSRect panelFrame = [appearancePanel frame];
+    NSRect panelFrame = [appearancePanel frame];
 
-	if ( frameMaxY < 0 )
-		frameMaxY = panelFrame.size.height-8;
+    if ( frameMaxY < 0 )
+        frameMaxY = panelFrame.size.height-8;
 
-	int height = 63;
+    int height = 63;
 
-	NSBox *newRow = [[NSBox alloc] initWithFrame:NSMakeRect(0, frameMaxY-height, panelFrame.size.width-10, height)];
-	[newRow setTitlePosition:NSNoTitle];
-	[newRow setBorderType:NSNoBorder];
+    NSBox *newRow = [[NSBox alloc] initWithFrame:NSMakeRect(0, frameMaxY-height, panelFrame.size.width-10, height)];
+    [newRow setTitlePosition:NSNoTitle];
+    [newRow setBorderType:NSNoBorder];
 
-	[newRow addSubview:[self preferencePanelSliderLabelForText:title aligned:NSNaturalTextAlignment andFrame:NSMakeRect(8, 25, 100, 25)]];
+    [newRow addSubview:[self preferencePanelSliderLabelForText:title aligned:NSNaturalTextAlignment andFrame:NSMakeRect(8, 25, 100, 25)]];
 
-	[newRow addSubview:[self preferencePanelSliderLabelForText:minText aligned:NSLeftTextAlignment andFrame:NSMakeRect(113, 0, 151, 25)]];
-	[newRow addSubview:[self preferencePanelSliderLabelForText:maxText aligned:NSRightTextAlignment andFrame:NSMakeRect(109+310-151-4, 0, 151, 25)]];
+    [newRow addSubview:[self preferencePanelSliderLabelForText:minText aligned:NSLeftTextAlignment andFrame:NSMakeRect(113, 0, 151, 25)]];
+    [newRow addSubview:[self preferencePanelSliderLabelForText:maxText aligned:NSRightTextAlignment andFrame:NSMakeRect(109+310-151-4, 0, 151, 25)]];
 
-	NSSlider *newControl = [[NSSlider alloc] initWithFrame:NSMakeRect(109, 29, 310, 25)];
+    NSSlider *newControl = [[NSSlider alloc] initWithFrame:NSMakeRect(109, 29, 310, 25)];
 
-	newControl.numberOfTickMarks=ticks;
-	[newControl setMinValue:min];
-	[newControl setMaxValue:max];
+    newControl.numberOfTickMarks=ticks;
+    [newControl setMinValue:min];
+    [newControl setMaxValue:max];
 
-	[self setBinding:@"value" forKey:keyPath andOrAction:action on:newControl];
+    [self setBinding:@"value" forKey:keyPath andOrAction:action on:newControl];
 
-	[newRow addSubview:newControl];
+    [newRow addSubview:newControl];
 
-	return newRow;
+    return newRow;
 }
 
 -(NSBox*) preferencePanelPopUpRowForText:(NSString*)title items:(NSArray*)items frameMaxY:(int)frameMaxY binding:(NSString*)keyPath action:(SEL)action
 {
-	NSRect panelFrame = [appearancePanel frame];
+    NSRect panelFrame = [appearancePanel frame];
 
-	if ( frameMaxY < 0 )
-		frameMaxY = panelFrame.size.height-8;
+    if ( frameMaxY < 0 )
+        frameMaxY = panelFrame.size.height-8;
 
-	int height = 40;
+    int height = 40;
 
-	NSBox *newRow = [[NSBox alloc] initWithFrame:NSMakeRect(0, frameMaxY-height+5, panelFrame.size.width-10, height)];
-	[newRow setTitlePosition:NSNoTitle];
-	[newRow setBorderType:NSNoBorder];
+    NSBox *newRow = [[NSBox alloc] initWithFrame:NSMakeRect(0, frameMaxY-height+5, panelFrame.size.width-10, height)];
+    [newRow setTitlePosition:NSNoTitle];
+    [newRow setBorderType:NSNoBorder];
 
-	[newRow addSubview:[self preferencePanelSliderLabelForText:title aligned:NSNaturalTextAlignment andFrame:NSMakeRect(8, -2, 100, 25)]];
+    [newRow addSubview:[self preferencePanelSliderLabelForText:title aligned:NSNaturalTextAlignment andFrame:NSMakeRect(8, -2, 100, 25)]];
 
-	NSPopUpButton *newControl = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(109, 4, 150, 25) pullsDown:NO];
+    NSPopUpButton *newControl = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(109, 4, 150, 25) pullsDown:NO];
 
-	[newControl addItemsWithTitles:items];
+    [newControl addItemsWithTitles:items];
 
-	[self setBinding:@"selectedIndex" forKey:keyPath andOrAction:action on:newControl];
+    [self setBinding:@"selectedIndex" forKey:keyPath andOrAction:action on:newControl];
 
-	[newRow addSubview:newControl];
+    [newRow addSubview:newControl];
 
-	return newRow;
+    return newRow;
 }
 
 -(NSBox*) preferencePanelCheckboxRowForText:(NSString*)title frameMaxY:(int)frameMaxY binding:(NSString*)keyPath action:(SEL)action
 {
-	NSRect panelFrame = [appearancePanel frame];
+    NSRect panelFrame = [appearancePanel frame];
 
-	if ( frameMaxY < 0 )
-		frameMaxY = panelFrame.size.height-8;
+    if ( frameMaxY < 0 )
+        frameMaxY = panelFrame.size.height-8;
 
-	int height = 40;
+    int height = 40;
 
-	NSBox *newRow = [[NSBox alloc] initWithFrame:NSMakeRect(0, frameMaxY-height+5, panelFrame.size.width-10, height)];
-	[newRow setTitlePosition:NSNoTitle];
-	[newRow setBorderType:NSNoBorder];
+    NSBox *newRow = [[NSBox alloc] initWithFrame:NSMakeRect(0, frameMaxY-height+5, panelFrame.size.width-10, height)];
+    [newRow setTitlePosition:NSNoTitle];
+    [newRow setBorderType:NSNoBorder];
 
-	NSButton *newControl = [[NSButton alloc] initWithFrame:NSMakeRect(8, 4, panelFrame.size.width-20, 25)];
+    NSButton *newControl = [[NSButton alloc] initWithFrame:NSMakeRect(8, 4, panelFrame.size.width-20, 25)];
 
-	[newControl setButtonType:NSSwitchButton];
-	[newControl setTitle:title];
+    [newControl setButtonType:NSSwitchButton];
+    [newControl setTitle:title];
 
-	[self setBinding:@"value" forKey:keyPath andOrAction:action on:newControl];
+    [self setBinding:@"value" forKey:keyPath andOrAction:action on:newControl];
 
-	[newRow addSubview:newControl];
+    [newRow addSubview:newControl];
 
-	return newRow;
+    return newRow;
 }
 
 -(void)setBinding:(NSString*)binding forKey:(NSString*)keyPath andOrAction:(SEL)action on:(NSControl*)newControl
 {
-	[newControl bind:binding
-			toObject:[NSUserDefaults standardUserDefaults]
-		 withKeyPath:keyPath
-			 options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES]
-												 forKey:@"NSContinuouslyUpdatesValue"]];
-	if ( nil != action )
-	{
-		[newControl setTarget:self];
-		[newControl setAction:action];
-	}
+    [newControl bind:binding
+            toObject:[NSUserDefaults standardUserDefaults]
+         withKeyPath:keyPath
+             options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES]
+                                                 forKey:@"NSContinuouslyUpdatesValue"]];
+    if ( nil != action )
+    {
+        [newControl setTarget:self];
+        [newControl setAction:action];
+    }
 }
 
 -(void) buildAppearancesPreferencePanel
 {
-	NSRect screenFrame = [[NSScreen mainScreen] frame];
+    NSRect screenFrame = [[NSScreen mainScreen] frame];
 
-	int nextYMax = -1;
-	NSView *row = [self preferencePanelSliderRowForText:@"Bezel transparency"
-											 withTicks:16
-											   minText:@"Lighter"
-											   maxText:@"Darker"
-											  minValue:0.1
-											  maxValue:0.9
-											 frameMaxY:nextYMax
-											   binding:@"bezelAlpha"
-												action:@selector(setBezelAlpha:)];
-	[appearancePanel addSubview:row];
-	nextYMax = row.frame.origin.y;
+    int nextYMax = -1;
+    NSView *row = [self preferencePanelSliderRowForText:@"Bezel transparency"
+                                             withTicks:16
+                                               minText:@"Lighter"
+                                               maxText:@"Darker"
+                                              minValue:0.1
+                                              maxValue:0.9
+                                             frameMaxY:nextYMax
+                                               binding:@"bezelAlpha"
+                                                action:@selector(setBezelAlpha:)];
+    [appearancePanel addSubview:row];
+    nextYMax = row.frame.origin.y;
 
-	row = [self preferencePanelSliderRowForText:@"Bezel width"
-									  withTicks:50
-										minText:@"Smaller"
-										maxText:@"Bigger"
-									   minValue:200
-									   maxValue:screenFrame.size.width
-									  frameMaxY:nextYMax
-										binding:@"bezelWidth"
-										 action:@selector(setBezelWidth:)];
-	[appearancePanel addSubview:row];
-	nextYMax = row.frame.origin.y;
+    row = [self preferencePanelSliderRowForText:@"Bezel width"
+                                      withTicks:50
+                                        minText:@"Smaller"
+                                        maxText:@"Bigger"
+                                       minValue:200
+                                       maxValue:screenFrame.size.width
+                                      frameMaxY:nextYMax
+                                        binding:@"bezelWidth"
+                                         action:@selector(setBezelWidth:)];
+    [appearancePanel addSubview:row];
+    nextYMax = row.frame.origin.y;
 
-	row = [self preferencePanelSliderRowForText:@"Bezel height"
-									  withTicks:50
-										minText:@"Smaller"
-										maxText:@"Bigger"
-									   minValue:200
-									   maxValue:screenFrame.size.height
-									  frameMaxY:nextYMax
-										binding:@"bezelHeight"
-										 action:@selector(setBezelHeight:)];
-	[appearancePanel addSubview:row];
-	nextYMax = row.frame.origin.y;
+    row = [self preferencePanelSliderRowForText:@"Bezel height"
+                                      withTicks:50
+                                        minText:@"Smaller"
+                                        maxText:@"Bigger"
+                                       minValue:200
+                                       maxValue:screenFrame.size.height
+                                      frameMaxY:nextYMax
+                                        binding:@"bezelHeight"
+                                         action:@selector(setBezelHeight:)];
+    [appearancePanel addSubview:row];
+    nextYMax = row.frame.origin.y;
 
-	row = [self preferencePanelPopUpRowForText:@"Menu item icon"
-										 items:[NSArray arrayWithObjects:
-												@"Flycut icon",
-												@"Black Flycut icon",
-												@"White scissors",
-												@"Black scissors",nil]
-									 frameMaxY:nextYMax
-									   binding:@"menuIcon"
-										action:@selector(switchMenuIcon:)];
-	[appearancePanel addSubview:row];
-	nextYMax = row.frame.origin.y;
+    row = [self preferencePanelPopUpRowForText:@"Menu item icon"
+                                         items:[NSArray arrayWithObjects:
+                                                @"Flycut icon",
+                                                @"Black Flycut icon",
+                                                @"White scissors",
+                                                @"Black scissors",nil]
+                                     frameMaxY:nextYMax
+                                       binding:@"menuIcon"
+                                        action:@selector(switchMenuIcon:)];
+    [appearancePanel addSubview:row];
+    nextYMax = row.frame.origin.y;
 
-//	row = [self preferencePanelCheckboxRowForText:@"Animate bezel appearance"
-//										frameMaxY:nextYMax
-//										  binding:@"popUpAnimation"
-//										   action:nil];
-//	[appearancePanel addSubview:row];
-//	nextYMax = row.frame.origin.y;
+//    row = [self preferencePanelCheckboxRowForText:@"Animate bezel appearance"
+//                                        frameMaxY:nextYMax
+//                                          binding:@"popUpAnimation"
+//                                           action:nil];
+//    [appearancePanel addSubview:row];
+//    nextYMax = row.frame.origin.y;
 
     row = [self preferencePanelCheckboxRowForText:@"Show clipping source app and time"
                                         frameMaxY:nextYMax
@@ -554,21 +550,20 @@
 
 -(IBAction) showPreferencePanel:(id)sender
 {
-    [currentRunningApplication release];
     currentRunningApplication = nil; // So it doesn't get pulled foreground atop the preference panel.
-	if ([prefsPanel respondsToSelector:@selector(setCollectionBehavior:)])
-		[prefsPanel setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
-	[NSApp activateIgnoringOtherApps: YES];
-	[prefsPanel makeKeyAndOrderFront:self];
-	issuedRememberResizeWarning = NO;
+    if ([prefsPanel respondsToSelector:@selector(setCollectionBehavior:)])
+        [prefsPanel setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
+    [NSApp activateIgnoringOtherApps: YES];
+    [prefsPanel makeKeyAndOrderFront:self];
+    issuedRememberResizeWarning = NO;
 }
 
 -(IBAction)toggleLoadOnStartup:(id)sender {
-	if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"loadOnStartup"] ) {
-		[UKLoginItemRegistry addLoginItemWithPath:[[NSBundle mainBundle] bundlePath] hideIt:NO];
-	} else {
-		[UKLoginItemRegistry removeLoginItemWithPath:[[NSBundle mainBundle] bundlePath]];
-	}
+    if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"loadOnStartup"] ) {
+        [UKLoginItemRegistry addLoginItemWithPath:[[NSBundle mainBundle] bundlePath] hideIt:NO];
+    } else {
+        [UKLoginItemRegistry removeLoginItemWithPath:[[NSBundle mainBundle] bundlePath]];
+    }
 }
 
 -(void)switchToFavoritesStore
@@ -596,13 +591,13 @@
 
 - (void)pasteFromStack
 {
-	if ( [clippingStore jcListCount] > stackPosition ) {
-		[self pasteIndex: stackPosition];
-		[self performSelector:@selector(hideApp) withObject:nil afterDelay:0.2];
-		[self performSelector:@selector(fakeCommandV) withObject:nil afterDelay:0.2];
-	} else {
-		[self performSelector:@selector(hideApp) withObject:nil afterDelay:0.2];
-	}
+    if ( [clippingStore jcListCount] > stackPosition ) {
+        [self pasteIndex: stackPosition];
+        [self performSelector:@selector(hideApp) withObject:nil afterDelay:0.2];
+        [self performSelector:@selector(fakeCommandV) withObject:nil afterDelay:0.2];
+    } else {
+        [self performSelector:@selector(hideApp) withObject:nil afterDelay:0.2];
+    }
     [self restoreStashedStore];
 }
 
@@ -673,12 +668,12 @@
 
 - (void)changeStack
 {
-	if ( [clippingStore jcListCount] > stackPosition ) {
-		[self pasteIndex: stackPosition];
-		[self performSelector:@selector(hideApp) withObject:nil afterDelay:0.2];
-	} else {
-		[self performSelector:@selector(hideApp) withObject:nil afterDelay:0.2];
-	}
+    if ( [clippingStore jcListCount] > stackPosition ) {
+        [self pasteIndex: stackPosition];
+        [self performSelector:@selector(hideApp) withObject:nil afterDelay:0.2];
+    } else {
+        [self performSelector:@selector(hideApp) withObject:nil afterDelay:0.2];
+    }
 }
 
 - (void)pasteIndex:(int) position {
@@ -690,25 +685,25 @@
         position = [mapping[position] intValue];
     }
 
-	[self addClipToPasteboardFromCount:position];
+    [self addClipToPasteboardFromCount:position];
 
-	if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"pasteMovesToTop"] ) {
-		[clippingStore clippingMoveToTop:position];
-		stackPosition = 0;
+    if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"pasteMovesToTop"] ) {
+        [clippingStore clippingMoveToTop:position];
+        stackPosition = 0;
         [self updateMenu];
-	}
+    }
 }
 
 - (void)metaKeysReleased
 {
-	if ( ! isBezelPinned ) {
-		[self pasteFromStack];
-	}
+    if ( ! isBezelPinned ) {
+        [self pasteFromStack];
+    }
 }
 
 -(void)fakeKey:(NSNumber*) keyCode withCommandFlag:(BOOL) setFlag
-	/*" +fakeKey synthesizes keyboard events. "*/
-{     
+    /*" +fakeKey synthesizes keyboard events. "*/
+{
     CGEventSourceRef sourceRef = CGEventSourceCreate(kCGEventSourceStateCombinedSessionState);
     if (!sourceRef)
     {
@@ -771,70 +766,70 @@
 
 -(BOOL)shouldSkip:(NSString *)contents
 {
-	NSString *type = [jcPasteboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]];
+    NSString *type = [jcPasteboard availableTypeFromArray:[NSArray arrayWithObject:NSStringPboardType]];
 
-	// Check to see if we are skipping passwords based on length and characters.
-	if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"skipPasswordFields"] )
-	{
-		// Check to see if they want a little help figuring out what types to enter.
-		if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"revealPasteboardTypes"] )
-			[clippingStore addClipping:type ofType:type fromAppLocalizedName:@"Flycut" fromAppBundleURL:nil atTimestamp:0];
+    // Check to see if we are skipping passwords based on length and characters.
+    if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"skipPasswordFields"] )
+    {
+        // Check to see if they want a little help figuring out what types to enter.
+        if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"revealPasteboardTypes"] )
+            [clippingStore addClipping:type ofType:type fromAppLocalizedName:@"Flycut" fromAppBundleURL:nil atTimestamp:0];
 
-		__block bool skipClipping = NO;
+        __block bool skipClipping = NO;
 
-		// Check the array of types to skip.
-		if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"skipPboardTypes"] )
-		{
-			NSArray *typesArray = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"skipPboardTypesList"] stringByReplacingOccurrencesOfString:@" " withString:@""] componentsSeparatedByString: @","];
-			[typesArray enumerateObjectsUsingBlock:^(id typeString, NSUInteger idx, BOOL *stop)
-			{
-				if ( [type isEqualToString:typeString] )
-				{
-					skipClipping = YES;
-					stop = YES;
-				}
-			}];
-		}
-		if (skipClipping)
-			return YES;
+        // Check the array of types to skip.
+        if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"skipPboardTypes"] )
+        {
+            NSArray *typesArray = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"skipPboardTypesList"] stringByReplacingOccurrencesOfString:@" " withString:@""] componentsSeparatedByString: @","];
+            [typesArray enumerateObjectsUsingBlock:^(id typeString, NSUInteger idx, BOOL *stop)
+            {
+                if ( [type isEqualToString:typeString] )
+                {
+                    skipClipping = YES;
+                    stop = YES;
+                }
+            }];
+        }
+        if (skipClipping)
+            return YES;
 
-		// Check the array of lengths to skip for suspicious strings.
-		if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"skipPasswordLengths"] )
-		{
-			int contentsLength = [contents length];
-			NSArray *lengthsArray = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"skipPasswordLengthsList"] stringByReplacingOccurrencesOfString:@" " withString:@""] componentsSeparatedByString: @","];
-			[lengthsArray enumerateObjectsUsingBlock:^(id lengthString, NSUInteger idx, BOOL *stop)
-			{
-				if ( [lengthString integerValue] == contentsLength )
-				{
-					NSRange uppercaseLetter = [contents rangeOfCharacterFromSet: [NSCharacterSet uppercaseLetterCharacterSet]];
-					NSRange lowercaseLetter = [contents rangeOfCharacterFromSet: [NSCharacterSet lowercaseLetterCharacterSet]];
-					NSRange decimalDigit = [contents rangeOfCharacterFromSet: [NSCharacterSet decimalDigitCharacterSet]];
-					NSRange punctuation = [contents rangeOfCharacterFromSet: [NSCharacterSet punctuationCharacterSet]];
-					NSRange symbol = [contents rangeOfCharacterFromSet: [NSCharacterSet symbolCharacterSet]];
-					NSRange control = [contents rangeOfCharacterFromSet: [NSCharacterSet controlCharacterSet]];
-					NSRange illegal = [contents rangeOfCharacterFromSet: [NSCharacterSet illegalCharacterSet]];
-					NSRange whitespaceAndNewline = [contents rangeOfCharacterFromSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-					if ( NSNotFound == control.location
-						&& NSNotFound == illegal.location
-						&& NSNotFound == whitespaceAndNewline.location
-						&& NSNotFound != uppercaseLetter.location
-						&& NSNotFound != lowercaseLetter.location
-						&& NSNotFound != decimalDigit.location
-						&& ( NSNotFound != punctuation.location
-							|| NSNotFound != symbol.location ) )
-					{
-						skipClipping = YES;
-						stop = YES;
-					}
-				}
-			}];
+        // Check the array of lengths to skip for suspicious strings.
+        if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"skipPasswordLengths"] )
+        {
+            int contentsLength = [contents length];
+            NSArray *lengthsArray = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"skipPasswordLengthsList"] stringByReplacingOccurrencesOfString:@" " withString:@""] componentsSeparatedByString: @","];
+            [lengthsArray enumerateObjectsUsingBlock:^(id lengthString, NSUInteger idx, BOOL *stop)
+            {
+                if ( [lengthString integerValue] == contentsLength )
+                {
+                    NSRange uppercaseLetter = [contents rangeOfCharacterFromSet: [NSCharacterSet uppercaseLetterCharacterSet]];
+                    NSRange lowercaseLetter = [contents rangeOfCharacterFromSet: [NSCharacterSet lowercaseLetterCharacterSet]];
+                    NSRange decimalDigit = [contents rangeOfCharacterFromSet: [NSCharacterSet decimalDigitCharacterSet]];
+                    NSRange punctuation = [contents rangeOfCharacterFromSet: [NSCharacterSet punctuationCharacterSet]];
+                    NSRange symbol = [contents rangeOfCharacterFromSet: [NSCharacterSet symbolCharacterSet]];
+                    NSRange control = [contents rangeOfCharacterFromSet: [NSCharacterSet controlCharacterSet]];
+                    NSRange illegal = [contents rangeOfCharacterFromSet: [NSCharacterSet illegalCharacterSet]];
+                    NSRange whitespaceAndNewline = [contents rangeOfCharacterFromSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    if ( NSNotFound == control.location
+                        && NSNotFound == illegal.location
+                        && NSNotFound == whitespaceAndNewline.location
+                        && NSNotFound != uppercaseLetter.location
+                        && NSNotFound != lowercaseLetter.location
+                        && NSNotFound != decimalDigit.location
+                        && ( NSNotFound != punctuation.location
+                            || NSNotFound != symbol.location ) )
+                    {
+                        skipClipping = YES;
+                        stop = YES;
+                    }
+                }
+            }];
 
-			if (skipClipping)
-				return YES;
-		}
-	}
-	return NO;
+            if (skipClipping)
+                return YES;
+        }
+    }
+    return NO;
 }
 
 -(void)pollPB:(NSTimer *)timer
@@ -843,34 +838,33 @@
     if ( [pbCount intValue] != [jcPasteboard changeCount] && !disableStore ) {
         // Reload pbCount with the current changeCount
         // Probably poor coding technique, but pollPB should be the only thing messing with pbCount, so it should be okay
-        [pbCount release];
-        pbCount = [[NSNumber numberWithInt:[jcPasteboard changeCount]] retain];
+        pbCount = [NSNumber numberWithInt:[jcPasteboard changeCount]];
         if ( type != nil ) {
-			NSRunningApplication *currRunningApp = nil;
-			for (NSRunningApplication *currApp in [[NSWorkspace sharedWorkspace] runningApplications])
-				if ([currApp isActive])
-					currRunningApp = currApp;
-			bool largeCopyRisk = nil != currRunningApp && [[currRunningApp localizedName] rangeOfString:@"Remote Desktop Connection"].location != NSNotFound;
+            NSRunningApplication *currRunningApp = nil;
+            for (NSRunningApplication *currApp in [[NSWorkspace sharedWorkspace] runningApplications])
+                if ([currApp isActive])
+                    currRunningApp = currApp;
+            bool largeCopyRisk = nil != currRunningApp && [[currRunningApp localizedName] rangeOfString:@"Remote Desktop Connection"].location != NSNotFound;
 
-			// Microsoft's Remote Desktop Connection has an issue with large copy actions, which appears to be in the time it takes to transer them over the network.  The copy starts being registered with OS X prior to completion of the transfer, and if the active application changes during the transfer the copy will be lost.  Indicate this time period by toggling the menu icon at the beginning of all RDC trasfers and back at the end.  Apple's Screen Sharing does not demonstrate this problem.
-			if (largeCopyRisk)
-				[self toggleMenuIconDisabled];
+            // Microsoft's Remote Desktop Connection has an issue with large copy actions, which appears to be in the time it takes to transer them over the network.  The copy starts being registered with OS X prior to completion of the transfer, and if the active application changes during the transfer the copy will be lost.  Indicate this time period by toggling the menu icon at the beginning of all RDC trasfers and back at the end.  Apple's Screen Sharing does not demonstrate this problem.
+            if (largeCopyRisk)
+                [self toggleMenuIconDisabled];
 
-			// In case we need to do a status visual, this will be dispatched out so our thread isn't blocked.
-			dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-			dispatch_async(queue, ^{
+            // In case we need to do a status visual, this will be dispatched out so our thread isn't blocked.
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+            dispatch_async(queue, ^{
 
-				// This operation blocks until the transfer is complete, though it was was here before the RDC issue was discovered.  Convenient.
+                // This operation blocks until the transfer is complete, though it was was here before the RDC issue was discovered.  Convenient.
                 NSString *contents = [jcPasteboard stringForType:type];
 
-				// Toggle back if dealing with the RDC issue.
-				if (largeCopyRisk)
-					[self toggleMenuIconDisabled];
+                // Toggle back if dealing with the RDC issue.
+                if (largeCopyRisk)
+                    [self toggleMenuIconDisabled];
 
-				if ( contents == nil || [self shouldSkip:contents] ) {
+                if ( contents == nil || [self shouldSkip:contents] ) {
                    DLog(@"Contents: Empty or skipped");
                } else {
-					if (( [clippingStore jcListCount] == 0 || ! [contents isEqualToString:[clippingStore clippingContentsAtPosition:0]])
+                    if (( [clippingStore jcListCount] == 0 || ! [contents isEqualToString:[clippingStore clippingContentsAtPosition:0]])
                         &&  ! [pbCount isEqualTo:pbBlockCount] ) {
                         
                         if ( [clippingStore rememberNum] == [clippingStore jcListCount]
@@ -885,42 +879,42 @@
                         }
                         
                        [clippingStore addClipping:contents
-										   ofType:type
-									   fromAppLocalizedName:[currRunningApp localizedName]
-									   fromAppBundleURL:currRunningApp.bundleURL.path
-									  atTimestamp:[[NSDate date] timeIntervalSince1970]];
-//						The below tracks our position down down down... Maybe as an option?
-//						if ( [clippingStore jcListCount] > 1 ) stackPosition++;
-						stackPosition = 0;
+                                           ofType:type
+                                       fromAppLocalizedName:[currRunningApp localizedName]
+                                       fromAppBundleURL:currRunningApp.bundleURL.path
+                                      atTimestamp:[[NSDate date] timeIntervalSince1970]];
+//                        The below tracks our position down down down... Maybe as an option?
+//                        if ( [clippingStore jcListCount] > 1 ) stackPosition++;
+                        stackPosition = 0;
                         [self updateMenu];
-						if ( [[NSUserDefaults standardUserDefaults] integerForKey:@"savePreference"] >= 2 )
+                        if ( [[NSUserDefaults standardUserDefaults] integerForKey:@"savePreference"] >= 2 )
                            [self saveEngine];
                    }
                }
             });
-        } 
+        }
     }
 }
 
 - (void)processBezelKeyDown:(NSEvent *)theEvent {
-	int newStackPosition;
-	// AppControl should only be getting these directly from bezel via delegation
-	if ([theEvent type] == NSKeyDown) {
-		if ([theEvent keyCode] == [mainRecorder keyCombo].code ) {
-			if ([theEvent modifierFlags] & NSShiftKeyMask) [self stackUp];
-			 else [self stackDown];
-			return;
-		}
-		unichar pressed = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+    int newStackPosition;
+    // AppControl should only be getting these directly from bezel via delegation
+    if ([theEvent type] == NSKeyDown) {
+        if ([theEvent keyCode] == [mainRecorder keyCombo].code ) {
+            if ([theEvent modifierFlags] & NSShiftKeyMask) [self stackUp];
+             else [self stackDown];
+            return;
+        }
+        unichar pressed = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
         NSUInteger modifiers = [theEvent modifierFlags];
-		switch (pressed) {
-			case 0x1B:
-				[self hideApp];
-				break;
+        switch (pressed) {
+            case 0x1B:
+                [self hideApp];
+                break;
             case 0xD: // Enter or Return
-				[self pasteFromStack];
-				break;
-			case 0x3:
+                [self pasteFromStack];
+                break;
+            case 0x3:
                 [self changeStack];
                 break;
             case 0x2C: // Comma
@@ -928,41 +922,41 @@
                     [self showPreferencePanel:nil];
                 }
                 break;
-			case NSUpArrowFunctionKey: 
-			case NSLeftArrowFunctionKey: 
+            case NSUpArrowFunctionKey:
+            case NSLeftArrowFunctionKey:
             case 0x6B: // k
-				[self stackUp];
-				break;
-			case NSDownArrowFunctionKey: 
-			case NSRightArrowFunctionKey:
+                [self stackUp];
+                break;
+            case NSDownArrowFunctionKey:
+            case NSRightArrowFunctionKey:
             case 0x6A: // j
-				[self stackDown];
-				break;
+                [self stackDown];
+                break;
             case NSHomeFunctionKey:
-				if ( [clippingStore jcListCount] > 0 ) {
-					stackPosition = 0;
-					[self updateBezel];
-				}
-				break;
-            case NSEndFunctionKey:
-				if ( [clippingStore jcListCount] > 0 ) {
-					stackPosition = [clippingStore jcListCount] - 1;
-					[self updateBezel];
-				}
-				break;
-            case NSPageUpFunctionKey:
-				if ( [clippingStore jcListCount] > 0 ) {
-					stackPosition = stackPosition - 10; if ( stackPosition < 0 ) stackPosition = 0;
-					[self updateBezel];
-				}
-				break;
-			case NSPageDownFunctionKey:
-				if ( [clippingStore jcListCount] > 0 ) {
-					stackPosition = stackPosition + 10; if ( stackPosition >= [clippingStore jcListCount] ) stackPosition = [clippingStore jcListCount] - 1;
+                if ( [clippingStore jcListCount] > 0 ) {
+                    stackPosition = 0;
                     [self updateBezel];
                 }
-				break;
-			case NSBackspaceCharacter:
+                break;
+            case NSEndFunctionKey:
+                if ( [clippingStore jcListCount] > 0 ) {
+                    stackPosition = [clippingStore jcListCount] - 1;
+                    [self updateBezel];
+                }
+                break;
+            case NSPageUpFunctionKey:
+                if ( [clippingStore jcListCount] > 0 ) {
+                    stackPosition = stackPosition - 10; if ( stackPosition < 0 ) stackPosition = 0;
+                    [self updateBezel];
+                }
+                break;
+            case NSPageDownFunctionKey:
+                if ( [clippingStore jcListCount] > 0 ) {
+                    stackPosition = stackPosition + 10; if ( stackPosition >= [clippingStore jcListCount] ) stackPosition = [clippingStore jcListCount] - 1;
+                    [self updateBezel];
+                }
+                break;
+            case NSBackspaceCharacter:
             case NSDeleteCharacter:
                 if ([clippingStore jcListCount] == 0)
                     return;
@@ -972,16 +966,16 @@
                 [self updateMenu];
                 break;
             case NSDeleteFunctionKey: break;
-			case 0x30: case 0x31: case 0x32: case 0x33: case 0x34: 				// Numeral 
-			case 0x35: case 0x36: case 0x37: case 0x38: case 0x39:
-				// We'll currently ignore the possibility that the user wants to do something with shift.
-				// First, let's set the new stack count to "10" if the user pressed "0"
-				newStackPosition = pressed == 0x30 ? 9 : [[NSString stringWithCharacters:&pressed length:1] intValue] - 1;
-				if ( [clippingStore jcListCount] >= newStackPosition ) {
-					stackPosition = newStackPosition;
-					[self fillBezel];
-				}
-				break;
+            case 0x30: case 0x31: case 0x32: case 0x33: case 0x34:                 // Numeral
+            case 0x35: case 0x36: case 0x37: case 0x38: case 0x39:
+                // We'll currently ignore the possibility that the user wants to do something with shift.
+                // First, let's set the new stack count to "10" if the user pressed "0"
+                newStackPosition = pressed == 0x30 ? 9 : [[NSString stringWithCharacters:&pressed length:1] intValue] - 1;
+                if ( [clippingStore jcListCount] >= newStackPosition ) {
+                    stackPosition = newStackPosition;
+                    [self fillBezel];
+                }
+                break;
             case 's': case 'S': // Save / Save-and-delete
                 if ([clippingStore jcListCount] == 0)
                     return;
@@ -1005,10 +999,10 @@
                 [self saveFromStackToFavorites];
                 break;
             default: // It's not a navigation/application-defined thing, so let's figure out what to do with it.
-				DLog(@"PRESSED %d", pressed);
-				DLog(@"CODE %ld", (long)[mainRecorder keyCombo].code);
-				break;
-		}		
+                DLog(@"PRESSED %d", pressed);
+                DLog(@"CODE %ld", (long)[mainRecorder keyCombo].code);
+                break;
+        }
     }
 }
 
@@ -1026,115 +1020,114 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
-	//Create our hot key
-	[self toggleMainHotKey:[NSNull null]];
+    //Create our hot key
+    [self toggleMainHotKey:[NSNull null]];
 }
 
 - (void) updateBezel
 {
-	if (stackPosition >= [clippingStore jcListCount] && stackPosition != 0) { // deleted last item
-		stackPosition = [clippingStore jcListCount] - 1;
-	}
-	if (stackPosition == 0 && [clippingStore jcListCount] == 0) { // empty
-		[bezel setText:@""];
-		[bezel setCharString:@"Empty"];
+    if (stackPosition >= [clippingStore jcListCount] && stackPosition != 0) { // deleted last item
+        stackPosition = [clippingStore jcListCount] - 1;
+    }
+    if (stackPosition == 0 && [clippingStore jcListCount] == 0) { // empty
+        [bezel setText:@""];
+        [bezel setCharString:@"Empty"];
         [bezel setSource:@""];
         [bezel setDate:@""];
         [bezel setSourceIcon:nil];
-	}
-	else { // normal
-		[self fillBezel];
-	}
+    }
+    else { // normal
+        [self fillBezel];
+    }
 }
 
 - (void) showBezel
 {
-	if ( [clippingStore jcListCount] > 0 && [clippingStore jcListCount] > stackPosition ) {
-		[self fillBezel];
-	}
-	NSRect mainScreenRect = [NSScreen mainScreen].visibleFrame;
-	[bezel setFrame:NSMakeRect(mainScreenRect.origin.x + mainScreenRect.size.width/2 - bezel.frame.size.width/2,
-							   mainScreenRect.origin.y + mainScreenRect.size.height/2 - bezel.frame.size.height/2,
-							   bezel.frame.size.width,
-							   bezel.frame.size.height) display:YES];
-	if ([bezel respondsToSelector:@selector(setCollectionBehavior:)])
-		[bezel setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
-//	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"popUpAnimation"])
-//		[bezel makeKeyAndOrderFrontWithPopEffect];
-//	else
+    if ( [clippingStore jcListCount] > 0 && [clippingStore jcListCount] > stackPosition ) {
+        [self fillBezel];
+    }
+    NSRect mainScreenRect = [NSScreen mainScreen].visibleFrame;
+    [bezel setFrame:NSMakeRect(mainScreenRect.origin.x + mainScreenRect.size.width/2 - bezel.frame.size.width/2,
+                               mainScreenRect.origin.y + mainScreenRect.size.height/2 - bezel.frame.size.height/2,
+                               bezel.frame.size.width,
+                               bezel.frame.size.height) display:YES];
+    if ([bezel respondsToSelector:@selector(setCollectionBehavior:)])
+        [bezel setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
+//    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"popUpAnimation"])
+//        [bezel makeKeyAndOrderFrontWithPopEffect];
+//    else
     [bezel makeKeyAndOrderFront:self];
-	isBezelDisplayed = YES;
+    isBezelDisplayed = YES;
 }
 
 - (void) hideBezel
 {
-	[bezel orderOut:nil];
-	[bezel setCharString:@"Empty"];
-	isBezelDisplayed = NO;
+    [bezel orderOut:nil];
+    [bezel setCharString:@"Empty"];
+    isBezelDisplayed = NO;
 }
 
 -(void)hideApp
 {
-	[self hideBezel];
-	isBezelPinned = NO;
-	[NSApp hide:self];
+    [self hideBezel];
+    isBezelPinned = NO;
+    [NSApp hide:self];
 }
 
 - (void) applicationWillResignActive:(NSApplication *)app; {
-	// This should be hidden anyway, but just in case it's not.
-	[self hideBezel];
+    // This should be hidden anyway, but just in case it's not.
+    [self hideBezel];
 }
 
 
 - (void)hitMainHotKey:(SGHotKey *)hotKey
 {
-	if ( ! isBezelDisplayed ) {
-		//Do NOT activate the app so focus stays on app the user is interacting with
-		//https://github.com/TermiT/Flycut/issues/45
-		//[NSApp activateIgnoringOtherApps:YES];
-		if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"stickyBezel"] ) {
-			isBezelPinned = YES;
-		}
-		[self showBezel];
-	} else {
-		[self stackDown];
-	}
+    if ( ! isBezelDisplayed ) {
+        //Do NOT activate the app so focus stays on app the user is interacting with
+        //https://github.com/TermiT/Flycut/issues/45
+        //[NSApp activateIgnoringOtherApps:YES];
+        if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"stickyBezel"] ) {
+            isBezelPinned = YES;
+        }
+        [self showBezel];
+    } else {
+        [self stackDown];
+    }
 }
 
 - (IBAction)toggleMainHotKey:(id)sender
 {
-	if (mainHotKey != nil)
-	{
-		[[SGHotKeyCenter sharedCenter] unregisterHotKey:mainHotKey];
-		[mainHotKey release];
-		mainHotKey = nil;
-	}
-	mainHotKey = [[SGHotKey alloc] initWithIdentifier:@"mainHotKey"
-											   keyCombo:[SGKeyCombo keyComboWithKeyCode:[mainRecorder keyCombo].code
-																			  modifiers:[mainRecorder cocoaToCarbonFlags: [mainRecorder keyCombo].flags]]];
-	[mainHotKey setName: @"Activate Flycut HotKey"]; //This is typically used by PTKeyComboPanel
-	[mainHotKey setTarget: self];
-	[mainHotKey setAction: @selector(hitMainHotKey:)];
-	[[SGHotKeyCenter sharedCenter] registerHotKey:mainHotKey];
+    if (mainHotKey != nil)
+    {
+        [[SGHotKeyCenter sharedCenter] unregisterHotKey:mainHotKey];
+        mainHotKey = nil;
+    }
+    mainHotKey = [[SGHotKey alloc] initWithIdentifier:@"mainHotKey"
+                                               keyCombo:[SGKeyCombo keyComboWithKeyCode:[mainRecorder keyCombo].code
+                                                                              modifiers:[mainRecorder cocoaToCarbonFlags: [mainRecorder keyCombo].flags]]];
+    [mainHotKey setName: @"Activate Flycut HotKey"]; //This is typically used by PTKeyComboPanel
+    [mainHotKey setTarget: self];
+    [mainHotKey setAction: @selector(hitMainHotKey:)];
+    [[SGHotKeyCenter sharedCenter] registerHotKey:mainHotKey];
 }
 
 -(IBAction)clearClippingList:(id)sender {
     int choice;
-	
-	[NSApp activateIgnoringOtherApps:YES];
-    choice = NSRunAlertPanel(@"Clear Clipping List", 
-							 @"Do you want to clear all recent clippings?",
-							 @"Clear", @"Cancel", nil);
-	
+    
+    [NSApp activateIgnoringOtherApps:YES];
+    choice = NSRunAlertPanel(@"Clear Clipping List",
+                             @"Do you want to clear all recent clippings?",
+                             @"Clear", @"Cancel", nil);
+    
     // on clear, zap the list and redraw the menu
     if ( choice == NSAlertDefaultReturn ) {
         [self restoreStashedStore]; // Only clear the clipping store.  Never the favorites.
         [clippingStore clearList];
         [self updateMenu];
-		if ( [[NSUserDefaults standardUserDefaults] integerForKey:@"savePreference"] >= 1 ) {
-			[self saveEngine];
-		}
-		[bezel setText:@""];
+        if ( [[NSUserDefaults standardUserDefaults] integerForKey:@"savePreference"] >= 1 ) {
+            [self saveEngine];
+        }
+        [bezel setText:@""];
     }
 }
 
@@ -1146,8 +1139,12 @@
 - (void)updateMenu {
     [self updateMenuContaining:nil];
     // Clear the search box whenever the is reason for updateMenu to be called, since the nil call will produce non-searched results.
-    [searchBox setStringValue:@""];
-    [[[searchBox cell] cancelButtonCell] performClick:self];
+    WeakSelf weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BlockSelf blockSelf = weakSelf;
+        [searchBox setStringValue:@""];
+        [[[searchBox cell] cancelButtonCell] performClick:blockSelf];
+    });
 }
 
 - (void)updateMenuContaining:(NSString*)search {
@@ -1181,28 +1178,27 @@
             [item setEnabled:YES];
             [jcMenu insertItem:item atIndex:0];
             // Way back in 0.2, failure to release the new item here was causing a quite atrocious memory leak.
-            [item release];
         }
     }
-	
+    
     // Now set the correct titles for each menu item.
     for(NSString *pbMenuTitle in clipStrings) {
         newItems--;
         NSMenuItem *item = [jcMenu itemAtIndex:newItems];
         item.title = pbMenuTitle;
         [jcMenu itemChanged: item];
-	}
+    }
 }
 
 -(IBAction)processMenuClippingSelection:(id)sender
 {
-	int index=[[sender menu] indexOfItem:sender];
-	[self pasteIndex:index];
+    int index=[[sender menu] indexOfItem:sender];
+    [self pasteIndex:index];
 
-	if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"menuSelectionPastes"] ) {
-		[self performSelector:@selector(hideApp) withObject:nil];
-		[self performSelector:@selector(fakeCommandV) withObject:nil afterDelay:0.2];
-	}
+    if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"menuSelectionPastes"] ) {
+        [self performSelector:@selector(hideApp) withObject:nil];
+        [self performSelector:@selector(fakeCommandV) withObject:nil afterDelay:0.2];
+    }
 }
 
 -(BOOL) isValidClippingNumber:(NSNumber *)number {
@@ -1219,8 +1215,6 @@
 
 -(void) setPBBlockCount:(NSNumber *)newPBBlockCount
 {
-    [newPBBlockCount retain];
-    [pbBlockCount release];
     pbBlockCount = newPBBlockCount;
 }
 
@@ -1230,7 +1224,7 @@
     NSArray *pbTypes;
     if ( (indexInt + 1) > [clippingStore jcListCount] ) {
         // We're asking for a clipping that isn't there yet
-		// This only tends to happen immediately on startup when not saving, as the entire list is empty.
+        // This only tends to happen immediately on startup when not saving, as the entire list is empty.
         DLog(@"Out of bounds request to jcList ignored.");
         return false;
     }
@@ -1238,7 +1232,7 @@
     pbTypes = [NSArray arrayWithObjects:@"NSStringPboardType",NULL];
     
     [jcPasteboard declareTypes:pbTypes owner:NULL];
-	
+    
     [jcPasteboard setString:pbFullText forType:@"NSStringPboardType"];
     [self setPBBlockCount:[NSNumber numberWithInt:[jcPasteboard changeCount]]];
     return true;
@@ -1246,29 +1240,29 @@
 
 -(void) loadEngineFromPList
 {
-    NSDictionary *loadDict = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"store"] copy];   
+    NSDictionary *loadDict = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"store"] copy];
     NSArray *savedJCList;
-	NSRange loadRange;
-	
+    NSRange loadRange;
+    
     int rangeCap;
-	
+    
     if ( loadDict != nil ) {
 
         savedJCList = [loadDict objectForKey:@"jcList"];
         
         if ( [savedJCList isKindOfClass:[NSArray class]] ) {
-            int rememberNumPref = [[NSUserDefaults standardUserDefaults] 
+            int rememberNumPref = [[NSUserDefaults standardUserDefaults]
                                    integerForKey:@"rememberNum"];
             // There's probably a nicer way to prevent the range from going out of bounds, but this works.
-			rangeCap = [savedJCList count] < rememberNumPref ? [savedJCList count] : rememberNumPref;
-			loadRange = NSMakeRange(0, rangeCap);
+            rangeCap = [savedJCList count] < rememberNumPref ? [savedJCList count] : rememberNumPref;
+            loadRange = NSMakeRange(0, rangeCap);
             NSArray *toBeRestoredClips = [[[savedJCList subarrayWithRange:loadRange] reverseObjectEnumerator] allObjects];
             for( NSDictionary *aSavedClipping in toBeRestoredClips)
-				[clippingStore addClipping:[aSavedClipping objectForKey:@"Contents"]
-									ofType:[aSavedClipping objectForKey:@"Type"]
-					  fromAppLocalizedName:[aSavedClipping objectForKey:@"AppLocalizedName"]
-						  fromAppBundleURL:[aSavedClipping objectForKey:@"AppBundleURL"]
-							   atTimestamp:[[aSavedClipping objectForKey:@"Timestamp"] integerValue]];
+                [clippingStore addClipping:[aSavedClipping objectForKey:@"Contents"]
+                                    ofType:[aSavedClipping objectForKey:@"Type"]
+                      fromAppLocalizedName:[aSavedClipping objectForKey:@"AppLocalizedName"]
+                          fromAppBundleURL:[aSavedClipping objectForKey:@"AppBundleURL"]
+                               atTimestamp:[[aSavedClipping objectForKey:@"Timestamp"] integerValue]];
             
             // Now for the favorites, same thing.
             savedJCList =[loadDict objectForKey:@"favoritesList"];
@@ -1287,24 +1281,23 @@
             }
         } else DLog(@"Not array");
         [self updateMenu];
-        [loadDict release];
     }
 }
 
 
 -(void) stackDown
 {
-	stackPosition++;
-	if ( [clippingStore jcListCount] > stackPosition ) {
-		[self fillBezel];
-	} else {
-		if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"wraparoundBezel"] ) {
-			stackPosition = 0;
-			[self fillBezel];
-		} else {
-			stackPosition--;
-		}
-	}
+    stackPosition++;
+    if ( [clippingStore jcListCount] > stackPosition ) {
+        [self fillBezel];
+    } else {
+        if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"wraparoundBezel"] ) {
+            stackPosition = 0;
+            [self fillBezel];
+        } else {
+            stackPosition--;
+        }
+    }
 }
 
 -(void) fillBezel
@@ -1328,18 +1321,18 @@
 
 -(void) stackUp
 {
-	stackPosition--;
-	if ( stackPosition < 0 ) {
-		if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"wraparoundBezel"] ) {
-			stackPosition = [clippingStore jcListCount] - 1;
-			[self fillBezel];
-		} else {
-			stackPosition = 0;
-		}
-	}
-	if ( [clippingStore jcListCount] > stackPosition ) {
-		[self fillBezel];
-	}
+    stackPosition--;
+    if ( stackPosition < 0 ) {
+        if ( [[NSUserDefaults standardUserDefaults] boolForKey:@"wraparoundBezel"] ) {
+            stackPosition = [clippingStore jcListCount] - 1;
+            [self fillBezel];
+        } else {
+            stackPosition = 0;
+        }
+    }
+    if ( [clippingStore jcListCount] > stackPosition ) {
+        [self fillBezel];
+    }
 }
 
 - (void)saveStore:(FlycutStore *)store toKey:(NSString *)key onDict:(NSMutableDictionary *)saveDict {
@@ -1390,28 +1383,28 @@
 }
 
 - (void)setHotKeyPreferenceForRecorder:(SRRecorderControl *)aRecorder {
-	if (aRecorder == mainRecorder) {
-		[[NSUserDefaults standardUserDefaults] setObject:
-			[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:[mainRecorder keyCombo].code],[NSNumber numberWithInt:[mainRecorder keyCombo].flags],nil] forKeys:[NSArray arrayWithObjects:@"keyCode",@"modifierFlags",nil]]
-		forKey:@"ShortcutRecorder mainHotkey"];
-	}
+    if (aRecorder == mainRecorder) {
+        [[NSUserDefaults standardUserDefaults] setObject:
+            [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:[mainRecorder keyCombo].code],[NSNumber numberWithInt:[mainRecorder keyCombo].flags],nil] forKeys:[NSArray arrayWithObjects:@"keyCode",@"modifierFlags",nil]]
+        forKey:@"ShortcutRecorder mainHotkey"];
+    }
 }
 
 - (BOOL)shortcutRecorder:(SRRecorderControl *)aRecorder isKeyCode:(NSInteger)keyCode andFlagsTaken:(NSUInteger)flags reason:(NSString **)aReason {
-	return NO;
+    return NO;
 }
 
 - (void)shortcutRecorder:(SRRecorderControl *)aRecorder keyComboDidChange:(KeyCombo)newKeyCombo {
-	if (aRecorder == mainRecorder) {
-		[self toggleMainHotKey: aRecorder];
-		[self setHotKeyPreferenceForRecorder: aRecorder];
-	}
-	DLog(@"code: %ld, flags: %lu", (long)newKeyCombo.code, (unsigned long)newKeyCombo.flags);
+    if (aRecorder == mainRecorder) {
+        [self toggleMainHotKey: aRecorder];
+        [self setHotKeyPreferenceForRecorder: aRecorder];
+    }
+    DLog(@"code: %ld, flags: %lu", (long)newKeyCombo.code, (unsigned long)newKeyCombo.flags);
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification {
-	if ( [[NSUserDefaults standardUserDefaults] integerForKey:@"savePreference"] >= 1 ) {
-		DLog(@"Saving on exit");
+    if ( [[NSUserDefaults standardUserDefaults] integerForKey:@"savePreference"] >= 1 ) {
+        DLog(@"Saving on exit");
         [self saveEngine];
     } else {
         // Remove clips from store
@@ -1419,25 +1412,19 @@
         DLog(@"Saving preferences on exit");
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-	//Unregister our hot key (not required)
-	[[SGHotKeyCenter sharedCenter] unregisterHotKey: mainHotKey];
-	[mainHotKey release];
-	mainHotKey = nil;
-	[self hideBezel];
-	[[NSDistributedNotificationCenter defaultCenter]
-		removeObserver:self
-        		  name:@"AppleKeyboardPreferencesChangedNotification"
-				object:nil];
-	[[NSDistributedNotificationCenter defaultCenter]
-		removeObserver:self
-				  name:@"AppleSelectedInputSourcesChangedNotification"
-				object:nil];
+    //Unregister our hot key (not required)
+    [[SGHotKeyCenter sharedCenter] unregisterHotKey: mainHotKey];
+    mainHotKey = nil;
+    [self hideBezel];
+    [[NSDistributedNotificationCenter defaultCenter]
+        removeObserver:self
+                  name:@"AppleKeyboardPreferencesChangedNotification"
+                object:nil];
+    [[NSDistributedNotificationCenter defaultCenter]
+        removeObserver:self
+                  name:@"AppleSelectedInputSourcesChangedNotification"
+                object:nil];
 }
 
-- (void) dealloc {
-	[bezel release];
-	[srTransformer release];
-	[super dealloc];
-}
 
 @end

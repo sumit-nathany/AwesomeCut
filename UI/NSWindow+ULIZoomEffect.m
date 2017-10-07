@@ -5,37 +5,37 @@
 //  Created by Uli Kusterer on 05.03.11.
 //  Copyright 2011 Uli Kusterer. All rights reserved.
 //
-//	This software is provided 'as-is', without any express or implied
-//	warranty. In no event will the authors be held liable for any damages
-//	arising from the use of this software.
+//    This software is provided 'as-is', without any express or implied
+//    warranty. In no event will the authors be held liable for any damages
+//    arising from the use of this software.
 //
-//	Permission is granted to anyone to use this software for any purpose,
-//	including commercial applications, and to alter it and redistribute it
-//	freely, subject to the following restrictions:
+//    Permission is granted to anyone to use this software for any purpose,
+//    including commercial applications, and to alter it and redistribute it
+//    freely, subject to the following restrictions:
 //
-//	   1. The origin of this software must not be misrepresented; you must not
-//	   claim that you wrote the original software. If you use this software
-//	   in a product, an acknowledgment in the product documentation would be
-//	   appreciated but is not required.
+//       1. The origin of this software must not be misrepresented; you must not
+//       claim that you wrote the original software. If you use this software
+//       in a product, an acknowledgment in the product documentation would be
+//       appreciated but is not required.
 //
-//	   2. Altered source versions must be plainly marked as such, and must not be
-//	   misrepresented as being the original software.
+//       2. Altered source versions must be plainly marked as such, and must not be
+//       misrepresented as being the original software.
 //
-//	   3. This notice may not be removed or altered from any source
-//	   distribution.
+//       3. This notice may not be removed or altered from any source
+//       distribution.
 //
 
 // -----------------------------------------------------------------------------
-//	Headers:
+//    Headers:
 // -----------------------------------------------------------------------------
 
 #import "NSWindow+ULIZoomEffect.h"
 
 
 // On 10.6 and lower, these 10.7 methods/symbols aren't declared, so we declare
-//	them here and call them conditionally when available:
-//	Otherwise 10.7's built-in animations get in the way of ours, which are cooler
-//	because they can come from a certain rectangle and thus convey information.
+//    them here and call them conditionally when available:
+//    Otherwise 10.7's built-in animations get in the way of ours, which are cooler
+//    because they can come from a certain rectangle and thus convey information.
 
 #ifndef MAC_OS_X_VERSION_10_7
 #define MAC_OS_X_VERSION_10_7 1070
@@ -51,13 +51,13 @@ enum {
     NSWindowAnimationBehaviorAlertPanel = 5
 };
 
-typedef NSInteger	NSWindowAnimationBehavior;
+typedef NSInteger    NSWindowAnimationBehavior;
 
 @interface NSWindow (ULITenSevenAnimationBehaviour)
 
--(void)							setAnimationBehavior: (NSWindowAnimationBehavior)animBehaviour;
--(NSWindowAnimationBehavior)	animationBehavior;
--(CGFloat)						backingScaleFactor;
+-(void)                            setAnimationBehavior: (NSWindowAnimationBehavior)animBehaviour;
+-(NSWindowAnimationBehavior)    animationBehavior;
+-(CGFloat)                        backingScaleFactor;
 
 @end
 
@@ -65,17 +65,17 @@ typedef NSInteger	NSWindowAnimationBehavior;
 
 
 // -----------------------------------------------------------------------------
-//	ULIQuicklyAnimatingWindow:
+//    ULIQuicklyAnimatingWindow:
 // -----------------------------------------------------------------------------
 
 // Window we use for our animations on which we can adjust the animation duration easily:
 
 @interface ULIQuicklyAnimatingWindow : NSWindow
 {
-    CGFloat		mAnimationResizeTime;
+    CGFloat        mAnimationResizeTime;
 }
 
-@property (assign) CGFloat		animationResizeTime;
+@property (assign) CGFloat        animationResizeTime;
 
 - (NSTimeInterval)animationResizeTime:(NSRect)newFrame;
 
@@ -86,7 +86,7 @@ typedef NSInteger	NSWindowAnimationBehavior;
 
 @synthesize animationResizeTime = mAnimationResizeTime;
 
--(id)	initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag screen:(NSScreen *)screen
+-(id)    initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag screen:(NSScreen *)screen
 {
     if(( self = [super initWithContentRect:contentRect styleMask:aStyle backing:bufferingType defer:flag screen: screen] ))
     {
@@ -97,7 +97,7 @@ typedef NSInteger	NSWindowAnimationBehavior;
 }
 
 
--(id)	initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag
+-(id)    initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag
 {
     if(( self = [super initWithContentRect:contentRect styleMask:aStyle backing:bufferingType defer:flag] ))
     {
@@ -112,7 +112,7 @@ typedef NSInteger	NSWindowAnimationBehavior;
 {
 #if 0 && DEBUG
     // Only turn this on temporarily for debugging. Otherwise it'll trigger for
-    //	 menu items that include the shift key, which is *not* what you want.
+    //     menu items that include the shift key, which is *not* what you want.
     return ([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? (mAnimationResizeTime * 10.0) : mAnimationResizeTime;
 #else
     return mAnimationResizeTime;
@@ -123,25 +123,25 @@ typedef NSInteger	NSWindowAnimationBehavior;
 
 
 // -----------------------------------------------------------------------------
-//	NSWindow (ULIZoomEffect)
+//    NSWindow (ULIZoomEffect)
 // -----------------------------------------------------------------------------
 
 @implementation NSWindow (ULIZoomEffect)
 
 // Calculate a sensible default start rect for the animation, depending on what
-//	screen it is. We don't want the zoom to come from another screen by accident.
+//    screen it is. We don't want the zoom to come from another screen by accident.
 
--(NSRect)	uli_startRectForScreen: (NSScreen*)theScreen
+-(NSRect)    uli_startRectForScreen: (NSScreen*)theScreen
 {
-    NSRect			screenBox = NSZeroRect;
-    NSScreen	*	menuBarScreen = [[NSScreen screens] objectAtIndex: 0];
+    NSRect            screenBox = NSZeroRect;
+    NSScreen    *    menuBarScreen = [[NSScreen screens] objectAtIndex: 0];
     if( theScreen == nil || menuBarScreen == theScreen )
     {
         // Use menu bar screen:
         screenBox = [menuBarScreen frame];
         
         // Take a rect in the upper left, which should be the menu bar:
-        //	(Like Finder in ye olde days)
+        //    (Like Finder in ye olde days)
         screenBox.origin.y += screenBox.size.height -16;
         screenBox.size.height = 16;
         screenBox.size.width = 16;
@@ -161,12 +161,12 @@ typedef NSInteger	NSWindowAnimationBehavior;
 
 
 // Create a "screen shot" of the given window which we use for our fake window
-//	that we can animate.
+//    that we can animate.
 
--(NSImage*)	uli_imageWithSnapshotForceActive: (BOOL)doForceActive
+-(NSImage*)    uli_imageWithSnapshotForceActive: (BOOL)doForceActive
 {
     NSDisableScreenUpdates();
-    BOOL	wasVisible = [self isVisible];
+    BOOL    wasVisible = [self isVisible];
     
     if( doForceActive )
         [self makeKeyAndOrderFront: nil];
@@ -187,7 +187,7 @@ typedef NSInteger	NSWindowAnimationBehavior;
         return nil;
     }
     
-    CGFloat		backingScaleFactor = 1.0;
+    CGFloat        backingScaleFactor = 1.0;
     if( [self respondsToSelector: @selector(backingScaleFactor)] )
         backingScaleFactor = self.backingScaleFactor;
     
@@ -195,26 +195,25 @@ typedef NSInteger	NSWindowAnimationBehavior;
     NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage: windowImage];
     NSImage *image = [[NSImage alloc] initWithSize: NSMakeSize(CGImageGetWidth(windowImage) / backingScaleFactor, CGImageGetHeight(windowImage) / backingScaleFactor)];
     [image addRepresentation: bitmapRep];
-    [bitmapRep release];
     CGImageRelease(windowImage);
     
-    return [image autorelease];
+    return image;
 }
 
 
 // Create a borderless window that shows and contains the given image:
 
--(ULIQuicklyAnimatingWindow*)	uli_animationWindowForZoomEffectWithImage: (NSImage*)snapshotImage
+-(ULIQuicklyAnimatingWindow*)    uli_animationWindowForZoomEffectWithImage: (NSImage*)snapshotImage
 {
-    NSRect			myFrame = [self frame];
+    NSRect            myFrame = [self frame];
     myFrame.size = [snapshotImage size];
-    ULIQuicklyAnimatingWindow	*	animationWindow = [[ULIQuicklyAnimatingWindow alloc] initWithContentRect: myFrame styleMask: NSBorderlessWindowMask backing: NSBackingStoreBuffered defer: NO];
+    ULIQuicklyAnimatingWindow    *    animationWindow = [[ULIQuicklyAnimatingWindow alloc] initWithContentRect: myFrame styleMask: NSBorderlessWindowMask backing: NSBackingStoreBuffered defer: NO];
     [animationWindow setOpaque: NO];
     
     if( [animationWindow respondsToSelector: @selector(setAnimationBehavior:)] )
         [animationWindow setAnimationBehavior: NSWindowAnimationBehaviorNone];
     
-    NSImageView	*	imageView = [[NSImageView alloc] initWithFrame: NSMakeRect(0,0,myFrame.size.width,myFrame.size.height)];
+    NSImageView    *    imageView = [[NSImageView alloc] initWithFrame: NSMakeRect(0,0,myFrame.size.width,myFrame.size.height)];
     [imageView setImageScaling: NSImageScaleAxesIndependently];
     [imageView setImageFrameStyle: NSImageFrameNone];
     [imageView setImageAlignment: NSImageAlignCenter];
@@ -222,7 +221,6 @@ typedef NSInteger	NSWindowAnimationBehavior;
     [imageView setAutoresizingMask: NSViewMinXMargin | NSViewMaxXMargin | NSViewMinYMargin | NSViewMaxYMargin | NSViewWidthSizable | NSViewHeightSizable];
     [[animationWindow contentView] addSubview: imageView];
     
-    [imageView release];
     
     [animationWindow setHasShadow: YES];
     [animationWindow display];
@@ -232,21 +230,21 @@ typedef NSInteger	NSWindowAnimationBehavior;
 
 
 // Effect like the "Find" highlight does, to grab user's attention (e.g when
-//	bringing a window to front that was already visible but might have been
-//	covered by other windows.
+//    bringing a window to front that was already visible but might have been
+//    covered by other windows.
 
--(void)	makeKeyAndOrderFrontWithPopEffect
+-(void)    makeKeyAndOrderFrontWithPopEffect
 {
-    BOOL						haveAnimBehaviour = [NSWindow instancesRespondToSelector: @selector(animationBehavior)];
-    NSWindowAnimationBehavior	oldAnimationBehaviour = haveAnimBehaviour ? [self animationBehavior] : 0;
+    BOOL                        haveAnimBehaviour = [NSWindow instancesRespondToSelector: @selector(animationBehavior)];
+    NSWindowAnimationBehavior    oldAnimationBehaviour = haveAnimBehaviour ? [self animationBehavior] : 0;
     if( haveAnimBehaviour )
-        [self setAnimationBehavior: NSWindowAnimationBehaviorNone];	// Prevent system animations from interfering.
+        [self setAnimationBehavior: NSWindowAnimationBehaviorNone];    // Prevent system animations from interfering.
     
-    NSImage		*	snapshotImage = [self uli_imageWithSnapshotForceActive: YES];
-    NSRect			myFrame = [self frame];
-    NSRect			poppedFrame = NSInsetRect(myFrame, -20, -20);
+    NSImage        *    snapshotImage = [self uli_imageWithSnapshotForceActive: YES];
+    NSRect            myFrame = [self frame];
+    NSRect            poppedFrame = NSInsetRect(myFrame, -20, -20);
     myFrame.size = snapshotImage.size;
-    ULIQuicklyAnimatingWindow	*	animationWindow = [self uli_animationWindowForZoomEffectWithImage: snapshotImage];
+    ULIQuicklyAnimatingWindow    *    animationWindow = [self uli_animationWindowForZoomEffectWithImage: snapshotImage];
     [animationWindow setAnimationResizeTime: 0.025];
     [animationWindow setFrame: myFrame display: YES];
     [animationWindow orderFront: nil];
@@ -267,20 +265,20 @@ typedef NSInteger	NSWindowAnimationBehavior;
 // Zoom the window out from a given rect, to indicate what it belongs to:
 // If the rect is tiny, we'll use a default starting rectangle.
 
--(void)	makeKeyAndOrderFrontWithZoomEffectFromRect: (NSRect)globalStartPoint
+-(void)    makeKeyAndOrderFrontWithZoomEffectFromRect: (NSRect)globalStartPoint
 {
     if( globalStartPoint.size.width < 1 || globalStartPoint.size.height < 1 )
         globalStartPoint = [self uli_startRectForScreen: [self screen]];
     
-    BOOL						haveAnimBehaviour = [NSWindow instancesRespondToSelector: @selector(animationBehavior)];
-    NSWindowAnimationBehavior	oldAnimationBehaviour = haveAnimBehaviour ? [self animationBehavior] : 0;
+    BOOL                        haveAnimBehaviour = [NSWindow instancesRespondToSelector: @selector(animationBehavior)];
+    NSWindowAnimationBehavior    oldAnimationBehaviour = haveAnimBehaviour ? [self animationBehavior] : 0;
     if( haveAnimBehaviour )
-        [self setAnimationBehavior: NSWindowAnimationBehaviorNone];	// Prevent system animations from interfering.
+        [self setAnimationBehavior: NSWindowAnimationBehaviorNone];    // Prevent system animations from interfering.
     
-    NSImage		*	snapshotImage = [self uli_imageWithSnapshotForceActive: YES];
-    NSRect			myFrame = [self frame];
+    NSImage        *    snapshotImage = [self uli_imageWithSnapshotForceActive: YES];
+    NSRect            myFrame = [self frame];
     myFrame.size = snapshotImage.size;
-    ULIQuicklyAnimatingWindow	*	animationWindow = [self uli_animationWindowForZoomEffectWithImage: snapshotImage];
+    ULIQuicklyAnimatingWindow    *    animationWindow = [self uli_animationWindowForZoomEffectWithImage: snapshotImage];
     [animationWindow setFrame: globalStartPoint display: YES];
     [animationWindow orderFront: nil];
     [animationWindow setFrame: myFrame display: YES animate: YES];
@@ -298,20 +296,20 @@ typedef NSInteger	NSWindowAnimationBehavior;
 
 // Same as -makeKeyAndOrderFrontWithZoomEffectFromRect: But doesn't make the window key:
 
--(void)	orderFrontWithZoomEffectFromRect: (NSRect)globalStartPoint
+-(void)    orderFrontWithZoomEffectFromRect: (NSRect)globalStartPoint
 {
     if( globalStartPoint.size.width < 1 || globalStartPoint.size.height < 1 )
         globalStartPoint = [self uli_startRectForScreen: [self screen]];
     
-    BOOL						haveAnimBehaviour = [NSWindow instancesRespondToSelector: @selector(animationBehavior)];
-    NSWindowAnimationBehavior	oldAnimationBehaviour = haveAnimBehaviour ? [self animationBehavior] : 0;
+    BOOL                        haveAnimBehaviour = [NSWindow instancesRespondToSelector: @selector(animationBehavior)];
+    NSWindowAnimationBehavior    oldAnimationBehaviour = haveAnimBehaviour ? [self animationBehavior] : 0;
     if( haveAnimBehaviour )
-        [self setAnimationBehavior: NSWindowAnimationBehaviorNone];	// Prevent system animations from interfering.
+        [self setAnimationBehavior: NSWindowAnimationBehaviorNone];    // Prevent system animations from interfering.
     
-    NSImage		*	snapshotImage = [self uli_imageWithSnapshotForceActive: NO];
-    NSRect			myFrame = [self frame];
+    NSImage        *    snapshotImage = [self uli_imageWithSnapshotForceActive: NO];
+    NSRect            myFrame = [self frame];
     myFrame.size = snapshotImage.size;
-    ULIQuicklyAnimatingWindow	*	animationWindow = [self uli_animationWindowForZoomEffectWithImage: snapshotImage];
+    ULIQuicklyAnimatingWindow    *    animationWindow = [self uli_animationWindowForZoomEffectWithImage: snapshotImage];
     [animationWindow setFrame: globalStartPoint display: YES];
     [animationWindow orderFront: nil];
     [animationWindow setFrame: myFrame display: YES animate: YES];
@@ -329,20 +327,20 @@ typedef NSInteger	NSWindowAnimationBehavior;
 
 // The reverse of -makeKeyAndOrderFrontWithZoomEffectFromRect:
 
--(void)	orderOutWithZoomEffectToRect: (NSRect)globalEndPoint
+-(void)    orderOutWithZoomEffectToRect: (NSRect)globalEndPoint
 {
     if( globalEndPoint.size.width < 1 || globalEndPoint.size.height < 1 )
         globalEndPoint = [self uli_startRectForScreen: [self screen]];
     
-    BOOL						haveAnimBehaviour = [NSWindow instancesRespondToSelector: @selector(animationBehavior)];
-    NSWindowAnimationBehavior	oldAnimationBehaviour = haveAnimBehaviour ? [self animationBehavior] : 0;
+    BOOL                        haveAnimBehaviour = [NSWindow instancesRespondToSelector: @selector(animationBehavior)];
+    NSWindowAnimationBehavior    oldAnimationBehaviour = haveAnimBehaviour ? [self animationBehavior] : 0;
     if( haveAnimBehaviour )
-        [self setAnimationBehavior: NSWindowAnimationBehaviorNone];	// Prevent system animations from interfering.
+        [self setAnimationBehavior: NSWindowAnimationBehaviorNone];    // Prevent system animations from interfering.
     
-    NSImage		*	snapshotImage = [self uli_imageWithSnapshotForceActive: NO];
-    NSRect			myFrame = [self frame];
+    NSImage        *    snapshotImage = [self uli_imageWithSnapshotForceActive: NO];
+    NSRect            myFrame = [self frame];
     myFrame.size = snapshotImage.size;
-    ULIQuicklyAnimatingWindow	*	animationWindow = [self uli_animationWindowForZoomEffectWithImage: snapshotImage];
+    ULIQuicklyAnimatingWindow    *    animationWindow = [self uli_animationWindowForZoomEffectWithImage: snapshotImage];
     [animationWindow setFrame: myFrame display: YES];
     
     NSDisableScreenUpdates();

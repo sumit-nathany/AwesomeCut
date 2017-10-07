@@ -16,27 +16,27 @@ static const float lineHeight = 16;
 @implementation BezelWindow
 
 - (id)initWithContentRect:(NSRect)contentRect
-				styleMask:(NSUInteger)aStyle
-  				backing:(NSBackingStoreType)bufferingType
-					defer:(BOOL)flag
-			   showSource:(BOOL)showSource {
+                styleMask:(NSUInteger)aStyle
+                  backing:(NSBackingStoreType)bufferingType
+                    defer:(BOOL)flag
+               showSource:(BOOL)showSource {
 
-	self = [super initWithContentRect:contentRect
-							styleMask:NSNonactivatingPanelMask | NSBorderlessWindowMask
-							backing:NSBackingStoreBuffered
-							defer:NO];
-	if ( self )
-	{
-		//set this window to be on top of all other windows
-		[self setLevel:NSScreenSaverWindowLevel];
+    self = [super initWithContentRect:contentRect
+                            styleMask:NSNonactivatingPanelMask | NSBorderlessWindowMask
+                            backing:NSBackingStoreBuffered
+                            defer:NO];
+    if ( self )
+    {
+        //set this window to be on top of all other windows
+        [self setLevel:NSScreenSaverWindowLevel];
 
-		[self setOpaque:NO];
-		[self setAlphaValue:1.0];
-		[self setOpaque:NO];
-		[self setHasShadow:NO];
-		[self setMovableByWindowBackground:NO];
+        [self setOpaque:NO];
+        [self setAlphaValue:1.0];
+        [self setOpaque:NO];
+        [self setHasShadow:NO];
+        [self setMovableByWindowBackground:NO];
         [self setColor:NO];
-		[self setBackgroundColor:[self backgroundColor]];
+        [self setBackgroundColor:[self backgroundColor]];
         showSourceField = showSource;
 
         if (showSourceField)
@@ -87,33 +87,33 @@ static const float lineHeight = 16;
             [sourceFieldDate setFont:newFont];
         }
 
-		NSRect textFrame = [self textFrame];
-		textField = [[RoundRecTextField alloc] initWithFrame:textFrame];
-		[[self contentView] addSubview:textField];
-		[textField setEditable:NO];
-		//[[textField cell] setScrollable:YES];
-		//[[textField cell] setWraps:NO];
-		[textField setTextColor:[NSColor whiteColor]];
-		[textField setBackgroundColor:[NSColor colorWithCalibratedWhite:0.1 alpha:.45]];
-		[textField setDrawsBackground:YES];
-		[textField setBordered:NO];
-		[textField setAlignment:NSLeftTextAlignment];
+        NSRect textFrame = [self textFrame];
+        textField = [[RoundRecTextField alloc] initWithFrame:textFrame];
+        [[self contentView] addSubview:textField];
+        [textField setEditable:NO];
+        //[[textField cell] setScrollable:YES];
+        //[[textField cell] setWraps:NO];
+        [textField setTextColor:[NSColor whiteColor]];
+        [textField setBackgroundColor:[NSColor colorWithCalibratedWhite:0.1 alpha:.45]];
+        [textField setDrawsBackground:YES];
+        [textField setBordered:NO];
+        [textField setAlignment:NSLeftTextAlignment];
 
-		NSRect charFrame = [self charFrame];
-		charField = [[RoundRecTextField alloc] initWithFrame:charFrame];
-		[[self contentView] addSubview:charField];
-		[charField setEditable:NO];
-		[charField setTextColor:[NSColor whiteColor]];
-		[charField setBackgroundColor:[NSColor colorWithCalibratedWhite:0.1 alpha:.45]];
-		[charField setDrawsBackground:YES];
-		[charField setBordered:NO];
-		[charField setAlignment:NSCenterTextAlignment];
+        NSRect charFrame = [self charFrame];
+        charField = [[RoundRecTextField alloc] initWithFrame:charFrame];
+        [[self contentView] addSubview:charField];
+        [charField setEditable:NO];
+        [charField setTextColor:[NSColor whiteColor]];
+        [charField setBackgroundColor:[NSColor colorWithCalibratedWhite:0.1 alpha:.45]];
+        [charField setDrawsBackground:YES];
+        [charField setBordered:NO];
+        [charField setAlignment:NSCenterTextAlignment];
         [charField setStringValue:@"Empty"];
 
-		[self setInitialFirstResponder:textField];         
-		return self;
-	}
-	return nil;
+        [self setInitialFirstResponder:textField];         
+        return self;
+    }
+    return nil;
 }
 
 
@@ -193,33 +193,29 @@ static const float lineHeight = 16;
 
 - (void) setAlpha:(float)newValue
 {
-	[self setBackgroundColor:[self backgroundColor]];
-	[[self contentView] setNeedsDisplay:YES];
+    [self setBackgroundColor:[self backgroundColor]];
+    [[self contentView] setNeedsDisplay:YES];
 }
 
 - (NSString *)title
 {
-	return title;
+    return title;
 }
 
 - (void)setTitle:(NSString *)newTitle
 {
-	[newTitle retain];
-	[title release];
-	title = newTitle;
+    title = newTitle;
 }
 
 - (NSString *)text
 {
-	return bezelText;
+    return bezelText;
 }
 
 - (void)setCharString:(NSString *)newChar
 {
-	[newChar retain];
-	[charString release];
-	charString = newChar;
-	[charField setStringValue:charString];
+    charString = newChar;
+    [charField setStringValue:charString];
 }
 
 - (void)setText:(NSString *)newText
@@ -228,54 +224,46 @@ static const float lineHeight = 16;
     // Since we can't see that much of it anyway, trim to 2000 characters.
     if ([newText length] > 2000)
         newText = [newText substringToIndex:2000];
-	[newText retain];
-	[bezelText release];
-	bezelText = newText;
-	[textField setStringValue:bezelText];
+    bezelText = newText;
+    [textField setStringValue:bezelText];
 }
 
 - (void)setSourceIcon:(NSImage *)newSourceIcon
 {
-	if (!showSourceField)
-		return;
-	[newSourceIcon retain];
-	[sourceIconImage release];
-	sourceIconImage = newSourceIcon;
-	[sourceIcon setImage:sourceIconImage];
+    if (!showSourceField)
+        return;
+    sourceIconImage = newSourceIcon;
+    [sourceIcon setImage:sourceIconImage];
 }
 
 - (void)setSource:(NSString *)newSource
 {
-	if (!showSourceField)
-		return;
+    if (!showSourceField)
+        return;
 
-	// Ensure that the source will fit in the screen space available, and truncate nicely if need be.
-	NSDictionary *attributes = @{NSFontAttributeName: sourceFieldApp.font};
-	CGSize size = [newSource sizeWithAttributes:attributes]; // How big is this string when drawn in this font?
-	if (size.width >= sourceFieldApp.frame.size.width - 5)
-	{
-		newSource = [NSString stringWithFormat:@"%@...", newSource];
-		do
-		{
-			newSource = [NSString stringWithFormat:@"%@...", [newSource substringToIndex:[newSource length] - 4]];
-			size = [newSource sizeWithAttributes:attributes];
-		} while (size.width >= sourceFieldApp.frame.size.width - 5);
-	}
+    // Ensure that the source will fit in the screen space available, and truncate nicely if need be.
+    NSDictionary *attributes = @{NSFontAttributeName: sourceFieldApp.font};
+    CGSize size = [newSource sizeWithAttributes:attributes]; // How big is this string when drawn in this font?
+    if (size.width >= sourceFieldApp.frame.size.width - 5)
+    {
+        newSource = [NSString stringWithFormat:@"%@...", newSource];
+        do
+        {
+            newSource = [NSString stringWithFormat:@"%@...", [newSource substringToIndex:[newSource length] - 4]];
+            size = [newSource sizeWithAttributes:attributes];
+        } while (size.width >= sourceFieldApp.frame.size.width - 5);
+    }
 
-	[newSource retain];
-	[sourceText release];
-	sourceText = newSource;
-	[sourceFieldApp setStringValue:sourceText];
+    sourceText = newSource;
+    [sourceFieldApp setStringValue:sourceText];
 }
 
 - (void)setDate:(NSString *)newDate
 {
-	if (!showSourceField)
-		return;
-	[newDate retain];
-	[dateText release];
-	dateText = newDate;
-	[sourceFieldDate setStringValue:dateText];
+    if (!showSourceField)
+        return;
+    dateText = newDate;
+    [sourceFieldDate setStringValue:dateText];
 }
 
 - (void)setColor:(BOOL)value
@@ -286,46 +274,39 @@ static const float lineHeight = 16;
 
 - (NSColor *)roundedBackgroundWithRect:(NSRect)bgRect withRadius:(float)radius withAlpha:(float)alpha
 {
-	NSImage *bg = [[NSImage alloc] initWithSize:bgRect.size];
-	[bg lockFocus];
-	// I'm not at all clear why this seems to work
-	NSRect dummyRect = NSMakeRect(0, 0, [bg size].width, [bg size].height);
-	NSBezierPath *roundedRec = [NSBezierPath bezierPathWithRoundRectInRect:dummyRect radius:radius];
+    NSImage *bg = [[NSImage alloc] initWithSize:bgRect.size];
+    [bg lockFocus];
+    // I'm not at all clear why this seems to work
+    NSRect dummyRect = NSMakeRect(0, 0, [bg size].width, [bg size].height);
+    NSBezierPath *roundedRec = [NSBezierPath bezierPathWithRoundRectInRect:dummyRect radius:radius];
     if (color)
         [[NSColor colorWithCalibratedRed:0.6 green:0.6 blue:0 alpha:alpha ] set];
     else
         [[NSColor colorWithCalibratedWhite:0.1 alpha:alpha] set];
     [roundedRec fill];
-	[bg unlockFocus];
-	return [NSColor colorWithPatternImage:[bg autorelease]];
+    [bg unlockFocus];
+    return [NSColor colorWithPatternImage:bg];
 }
 
 - (NSColor *)sizedBezelBackgroundWithRadius:(float)radius withAlpha:(float)alpha
 {
-	return [self roundedBackgroundWithRect:[self frame] withRadius:radius withAlpha:alpha];
+    return [self roundedBackgroundWithRect:[self frame] withRadius:radius withAlpha:alpha];
 }
 
 -(BOOL)canBecomeKeyWindow
 {
-	return YES;
+    return YES;
 }
 
-- (void)dealloc
-{
-	[textField release];
-	[charField release];
-	[iconView release];
-	[super dealloc];
-}
 
 - (BOOL)performKeyEquivalent:(NSEvent*) theEvent
 {
-	if ( [self delegate] )
-	{
-		[delegate performSelector:@selector(processBezelKeyDown:) withObject:theEvent];
-		return YES;
-	}
-	return NO;
+    if ( [self delegate] )
+    {
+        [delegate performSelector:@selector(processBezelKeyDown:) withObject:theEvent];
+        return YES;
+    }
+    return NO;
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent
@@ -347,24 +328,24 @@ static const float lineHeight = 16;
 
 
 - (void)keyDown:(NSEvent *)theEvent {
-	if ( [self delegate] )
-	{
-		[delegate performSelector:@selector(processBezelKeyDown:) withObject:theEvent];
-	}
+    if ( [self delegate] )
+    {
+        [delegate performSelector:@selector(processBezelKeyDown:) withObject:theEvent];
+    }
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent {
-	if ( !    ( [theEvent modifierFlags] & NSCommandKeyMask )
-		 && ! ( [theEvent modifierFlags] & NSAlternateKeyMask )
-		 && ! ( [theEvent modifierFlags] & NSControlKeyMask )
-		 && ! ( [theEvent modifierFlags] & NSShiftKeyMask )
-		 && [ self delegate ]
-		 )
-	{
-		[delegate performSelector:@selector(metaKeysReleased)];
-	}
+    if ( !    ( [theEvent modifierFlags] & NSCommandKeyMask )
+         && ! ( [theEvent modifierFlags] & NSAlternateKeyMask )
+         && ! ( [theEvent modifierFlags] & NSControlKeyMask )
+         && ! ( [theEvent modifierFlags] & NSShiftKeyMask )
+         && [ self delegate ]
+         )
+    {
+        [delegate performSelector:@selector(metaKeysReleased)];
+    }
 }
-		
+        
 - (id)delegate {
     return delegate;
 }

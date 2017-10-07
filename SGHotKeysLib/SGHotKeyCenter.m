@@ -29,15 +29,11 @@ static SGHotKeyCenter *sharedCenter = nil;
 @implementation SGHotKeyCenter
 
 + (void)initialize {
-	if (!sharedCenter) {
-		sharedCenter = [[self alloc] init];
-	}	
+    if (!sharedCenter) {
+        sharedCenter = [[self alloc] init];
+    }    
 }
 
-- (void)dealloc {
-  [hotKeys release];
-  [super dealloc];
-}
 
 + (SGHotKeyCenter *)sharedCenter {    
   return sharedCenter;
@@ -47,7 +43,7 @@ static SGHotKeyCenter *sharedCenter = nil;
   //Usually already set by +initialize.
   if (sharedCenter) {
     //The caller expects to receive a new object, so implicitly retain it to balance out the caller's eventual release message.
-    return [sharedCenter retain];
+    return sharedCenter;
   } else {
     //When not already set, +initialize is our caller—it's creating the shared instance. Let this go through.
     return [super allocWithZone:zone];
@@ -58,11 +54,11 @@ static SGHotKeyCenter *sharedCenter = nil;
   if (!hasInited) {
     if ((self = [super init])) {
       //Initialize the instance here.
-			hotKeys = [[NSMutableDictionary alloc] init];    
+            hotKeys = [[NSMutableDictionary alloc] init];    
       hasInited = YES;
     }
   }
-	
+    
   return self;
 }
 
@@ -110,17 +106,17 @@ static SGHotKeyCenter *sharedCenter = nil;
   NSValue *key = nil;
   
   if (![[self allHotKeys] containsObject:theHotKey])
-		return;
-	
-	carbonHotKey = [self _carbonHotKeyForHotKey:theHotKey];
-	NSAssert(carbonHotKey != nil, @"");
+        return;
+    
+    carbonHotKey = [self _carbonHotKeyForHotKey:theHotKey];
+    NSAssert(carbonHotKey != nil, @"");
   
-	UnregisterEventHotKey(carbonHotKey);
+    UnregisterEventHotKey(carbonHotKey);
   
-	key = [NSValue valueWithPointer:carbonHotKey];
-	[hotKeys removeObjectForKey:key];
-	
-	[self _updateEventHandler];
+    key = [NSValue valueWithPointer:carbonHotKey];
+    [hotKeys removeObjectForKey:key];
+    
+    [self _updateEventHandler];
 }
 
 - (NSArray *)allHotKeys {
@@ -134,7 +130,7 @@ static SGHotKeyCenter *sharedCenter = nil;
   
   for (SGHotKey *hotKey in [self allHotKeys]) {
     if([[hotKey identifier] isEqual:theIdentifier] )
-			return hotKey;
+            return hotKey;
   }
   
   return nil;
@@ -186,7 +182,7 @@ static SGHotKeyCenter *sharedCenter = nil;
 
 - (SGHotKey *)_hotKeyForCarbonHotKey:(EventHotKeyRef)carbonHotKey {
   NSValue *key = [NSValue valueWithPointer:carbonHotKey];
-	return [hotKeys objectForKey:key];
+    return [hotKeys objectForKey:key];
 }
 
 - (EventHotKeyRef)_carbonHotKeyForHotKey:(SGHotKey *)hotKey {
@@ -202,18 +198,18 @@ static SGHotKeyCenter *sharedCenter = nil;
 }
 
 - (void)_updateEventHandler {  
-	if ([hotKeys count] && eventHandlerInstalled == NO) {
-		EventTypeSpec eventSpec[2] = {
-			{ kEventClassKeyboard, kEventHotKeyPressed },
-			{ kEventClassKeyboard, kEventHotKeyReleased }
-		};
+    if ([hotKeys count] && eventHandlerInstalled == NO) {
+        EventTypeSpec eventSpec[2] = {
+            { kEventClassKeyboard, kEventHotKeyPressed },
+            { kEventClassKeyboard, kEventHotKeyReleased }
+        };
     
-		InstallEventHandler(GetEventDispatcherTarget(), 
+        InstallEventHandler(GetEventDispatcherTarget(), 
                         (EventHandlerProcPtr)hotKeyEventHandler, 
                         2, eventSpec, nil, nil);
     
-		eventHandlerInstalled = YES;
-	}  
+        eventHandlerInstalled = YES;
+    }  
 }
 
 - (void)_hotKeyDown:(SGHotKey *)hotKey {

@@ -16,27 +16,27 @@
 
 -(id) init
 {
-    [self initWithContents:@""
+    if (!(self = [self initWithContents:@""
                   withType:@""
          withDisplayLength:40
       withAppLocalizedName:@""
           withAppBundleURL:nil
-             withTimestamp:0];
+             withTimestamp:0])) return nil;
     return self;
 }
 
 -(id) initWithContents:(NSString *)contents withType:(NSString *)type withDisplayLength:(int)displayLength withAppLocalizedName:(NSString *)localizedName withAppBundleURL:(NSString*)bundleURL withTimestamp:(int)timestamp
 {
-    [super init];
-    clipContents = [[[NSString alloc] init] retain];
-    clipDisplayString = [[[NSString alloc] init] retain];
-    clipType = [[[NSString alloc] init] retain];
+    if (!(self = [super init])) return nil;
+    clipContents = [[NSString alloc] init];
+    clipDisplayString = [[NSString alloc] init];
+    clipType = [[NSString alloc] init];
 
     [self setContents:contents setDisplayLength:displayLength];
     [self setType:type];
     [self setAppLocalizedName:localizedName];
     [self setAppBundleURL:bundleURL];
-    [self setTimestamp:timestamp];
+    [self setTimestamp:[@(timestamp) stringValue]];
     [self setHasName:false];
     
     return self;
@@ -53,7 +53,7 @@
         [coder decodeValueOfObjCType:@encode(int) at:&newDisplayLength];
         newType = [NSString stringWithString:[coder decodeObject]];
         [coder decodeValueOfObjCType:@encode(BOOL) at:&newHasName];
-        [self 	     setContents:newContents
+        [self          setContents:newContents
                 setDisplayLength:newDisplayLength];
         [self setType:newType];
         [self setHasName:newHasName];
@@ -74,9 +74,7 @@
 -(void) setContents:(NSString *)newContents setDisplayLength:(int)newDisplayLength
 {
     id old = clipContents;
-    [newContents retain];
     clipContents = newContents;
-    [old release];
     if ( newDisplayLength  > 0 ) {
         clipDisplayLength = newDisplayLength;
     }
@@ -86,18 +84,14 @@
 -(void) setContents:(NSString *)newContents
 {
     id old = clipContents;
-    [newContents retain];
     clipContents = newContents;
-    [old release];
     [self resetDisplayString];
 }
 
 -(void) setType:(NSString *)newType
 {
     id old = clipType;
-    [newType retain];
     clipType = newType;
-    [old release];
 }
 
 -(void) setDisplayLength:(int)newDisplayLength
@@ -111,17 +105,13 @@
 -(void) setAppLocalizedName:(NSString *)new
 {
     id old = appLocalizedName;
-    [new retain];
     appLocalizedName = new;
-    [old release];
 }
 
 -(void) setAppBundleURL:(NSString *)new
 {
     id old = appBundleURL;
-    [new retain];
     appBundleURL = new;
-    [old release];
 }
 
 -(void) setTimestamp:(NSString *)newTimestamp
@@ -137,22 +127,20 @@
 -(void) resetDisplayString
 {
     NSString *newDisplayString, *firstLineOfClipping, *trimmedString;
-	NSUInteger start, lineEnd, contentsEnd;
-	NSRange startRange = NSMakeRange(0,0);
-	NSRange contentsRange;
-	// We're resetting the display string, so release the old one.
-    [clipDisplayString release];
-	// We want to restrict the display string to the clipping contents through the first line break.
+    NSUInteger start, lineEnd, contentsEnd;
+    NSRange startRange = NSMakeRange(0,0);
+    NSRange contentsRange;
+    // We're resetting the display string, so release the old one.
+    // We want to restrict the display string to the clipping contents through the first line break.
     trimmedString = [clipContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     [trimmedString getLineStart:&start end:&lineEnd contentsEnd:&contentsEnd forRange:startRange];
-	contentsRange = NSMakeRange(0, contentsEnd);
-	firstLineOfClipping = [trimmedString substringWithRange:contentsRange];
+    contentsRange = NSMakeRange(0, contentsEnd);
+    firstLineOfClipping = [trimmedString substringWithRange:contentsRange];
     if ( [firstLineOfClipping length] > clipDisplayLength ) {
         newDisplayString = [[NSString stringWithString:[firstLineOfClipping substringToIndex:clipDisplayLength]] stringByAppendingString:@"…"];   
     } else {
         newDisplayString = [NSString stringWithString:firstLineOfClipping];
     }
-    [newDisplayString retain];
     clipDisplayString = newDisplayString;
 }
 
@@ -232,13 +220,7 @@
 
 -(void) dealloc
 {
-    [clipContents release];
-    [clipType release];
-    [appLocalizedName release];
-    [appBundleURL release];
     clipDisplayLength = 0;
-    [clipDisplayString release];
     clipHasName = 0;
-    [super dealloc];
 }
 @end

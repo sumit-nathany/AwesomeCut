@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Flycut.xcodeproj">
+      location = "self:/Users/sumit/Flycut/AwesomeCut.xcodeproj">
    </FileRef>
 </Workspace>

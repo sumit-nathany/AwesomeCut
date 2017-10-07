@@ -11,87 +11,87 @@
 
 @implementation UKLoginItemRegistry
 
-+(NSArray*)	allLoginItems
++(NSArray*)    allLoginItems
 {
-	NSArray*	itemsList = nil;
-	OSStatus	err = LIAECopyLoginItems( (CFArrayRef*) &itemsList );	// Take advantage of toll-free bridging.
-	if( err != noErr )
-	{
-		DLog(@"Couldn't list login items error %d", (int)err);
-		return nil;
-	}
-	
-	return [itemsList autorelease];
+    NSArray*    itemsList = nil;
+    OSStatus    err = LIAECopyLoginItems( (void*) &itemsList );    // Take advantage of toll-free bridging.
+    if( err != noErr )
+    {
+        DLog(@"Couldn't list login items error %d", (int)err);
+        return nil;
+    }
+    
+    return itemsList;
 }
 
-+(BOOL)		addLoginItemWithURL: (NSURL*)url hideIt: (BOOL)hide			// Main bottleneck for adding a login item.
++(BOOL)        addLoginItemWithURL: (NSURL*)url hideIt: (BOOL)hide            // Main bottleneck for adding a login item.
 {
-	OSStatus err = LIAEAddURLAtEnd( (CFURLRef) url, hide );	// CFURLRef is toll-free bridged to NSURL.
-	
-	if( err != noErr )
-		DLog(@"Couldn't add login item error %d", (int)err);
-	
-	return( err == noErr );
-}
-
-
-+(BOOL)		removeLoginItemAtIndex: (int)idx			// Main bottleneck for getting rid of a login item.
-{
-	OSStatus err = LIAERemove( idx );
-	
-	if( err != noErr )
-		DLog(@"Couldn't remove login intem error %d", (int)err);
-	
-	return( err == noErr );
+    OSStatus err = LIAEAddURLAtEnd( (__bridge CFURLRef) url, hide );    // CFURLRef is toll-free bridged to NSURL.
+    
+    if( err != noErr )
+        DLog(@"Couldn't add login item error %d", (int)err);
+    
+    return( err == noErr );
 }
 
 
-+(int)		indexForLoginItemWithURL: (NSURL*)url		// Main bottleneck for finding a login item in the list.
++(BOOL)        removeLoginItemAtIndex: (int)idx            // Main bottleneck for getting rid of a login item.
 {
-	NSArray*		loginItems = [self allLoginItems];
-	NSEnumerator*	enny = [loginItems objectEnumerator];
-	NSDictionary*	currLoginItem = nil;
-	int				x = 0;
-	
-	while(( currLoginItem = [enny nextObject] ))
-	{
-		if( [[currLoginItem objectForKey: UKLoginItemURL] isEqualTo: url] )
-			return x;
-		
-		x++;
-	}
-	
-	return -1;
-}
-
-+(int)		indexForLoginItemWithPath: (NSString*)path
-{
-	NSURL*	url = [NSURL fileURLWithPath: path];
-	
-	return [self indexForLoginItemWithURL: url];
-}
-
-+(BOOL)		addLoginItemWithPath: (NSString*)path hideIt: (BOOL)hide
-{
-	NSURL*	url = [NSURL fileURLWithPath: path];
-	
-	return [self addLoginItemWithURL: url hideIt: hide];
+    OSStatus err = LIAERemove( idx );
+    
+    if( err != noErr )
+        DLog(@"Couldn't remove login intem error %d", (int)err);
+    
+    return( err == noErr );
 }
 
 
-+(BOOL)		removeLoginItemWithPath: (NSString*)path
++(int)        indexForLoginItemWithURL: (NSURL*)url        // Main bottleneck for finding a login item in the list.
 {
-	int		idx = [self indexForLoginItemWithPath: path];
-	
-	return (idx != -1) && [self removeLoginItemAtIndex: idx];	// Found item? Remove it and return success flag. Else return NO.
+    NSArray*        loginItems = [self allLoginItems];
+    NSEnumerator*    enny = [loginItems objectEnumerator];
+    NSDictionary*    currLoginItem = nil;
+    int                x = 0;
+    
+    while(( currLoginItem = [enny nextObject] ))
+    {
+        if( [[currLoginItem objectForKey: UKLoginItemURL] isEqualTo: url] )
+            return x;
+        
+        x++;
+    }
+    
+    return -1;
+}
+
++(int)        indexForLoginItemWithPath: (NSString*)path
+{
+    NSURL*    url = [NSURL fileURLWithPath: path];
+    
+    return [self indexForLoginItemWithURL: url];
+}
+
++(BOOL)        addLoginItemWithPath: (NSString*)path hideIt: (BOOL)hide
+{
+    NSURL*    url = [NSURL fileURLWithPath: path];
+    
+    return [self addLoginItemWithURL: url hideIt: hide];
 }
 
 
-+(BOOL)		removeLoginItemWithURL: (NSURL*)url
++(BOOL)        removeLoginItemWithPath: (NSString*)path
 {
-	int		idx = [self indexForLoginItemWithURL: url];
-	
-	return (idx != -1) && [self removeLoginItemAtIndex: idx];	// Found item? Remove it and return success flag. Else return NO.
+    int        idx = [self indexForLoginItemWithPath: path];
+    
+    return (idx != -1) && [self removeLoginItemAtIndex: idx];    // Found item? Remove it and return success flag. Else return NO.
+}
+
+
++(BOOL)        removeLoginItemWithURL: (NSURL*)url
+{
+    int        idx = [self indexForLoginItemWithURL: url];
+    
+    return (idx != -1) && [self removeLoginItemAtIndex: idx];    // Found item? Remove it and return success flag. Else return NO.
 }
 
 @end

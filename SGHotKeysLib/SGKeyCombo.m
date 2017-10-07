@@ -23,7 +23,7 @@ NSString * const kModifiersDictionaryKey = @"modifiers";
 }
 
 + (id)keyComboWithKeyCode:(NSInteger)theKeyCode modifiers:(NSInteger)theModifiers {
-  return [[[self alloc] initWithKeyCode:theKeyCode modifiers:theModifiers] autorelease];
+  return [[self alloc] initWithKeyCode:theKeyCode modifiers:theModifiers];
 }
 
 
@@ -77,109 +77,109 @@ NSString * const kModifiersDictionaryKey = @"modifiers";
 }
 
 + (NSString*)_stringForModifiers:(NSInteger)theModifiers {
-	static unichar modToChar[4][2] =
-	{
-		{ cmdKey, 		kCommandUnicode },
-		{ optionKey,	kOptionUnicode },
-		{ controlKey,	kControlUnicode },
-		{ shiftKey,		kShiftUnicode }
-	};
+    static unichar modToChar[4][2] =
+    {
+        { cmdKey,         kCommandUnicode },
+        { optionKey,    kOptionUnicode },
+        { controlKey,    kControlUnicode },
+        { shiftKey,        kShiftUnicode }
+    };
   
-	NSString *string = [NSString string];
-	long i;
+    NSString *string = [NSString string];
+    long i;
   
-	for( i = 0; i < 4; i++ ) {
-		if (theModifiers & modToChar[i][0] )
-			string = [string stringByAppendingString: [NSString stringWithCharacters: &modToChar[i][1] length: 1]];
-	}
+    for( i = 0; i < 4; i++ ) {
+        if (theModifiers & modToChar[i][0] )
+            string = [string stringByAppendingString: [NSString stringWithCharacters: &modToChar[i][1] length: 1]];
+    }
   
-	return string;
+    return string;
 }
 
 + (NSDictionary *)_keyCodesDictionary {
-	static NSDictionary *keyCodes = nil;
-	
-	if(keyCodes == nil) {
-		NSString *path;
-		NSString *contents;
+    static NSDictionary *keyCodes = nil;
+    
+    if(keyCodes == nil) {
+        NSString *path;
+        NSString *contents;
     NSError *error;
-		
-		path = [[NSBundle bundleForClass:self] pathForResource:@"SGKeyCodes" ofType:@"plist"];
-		contents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+        
+        path = [[NSBundle bundleForClass:self] pathForResource:@"SGKeyCodes" ofType:@"plist"];
+        contents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
     NSAssert(contents != nil, @"Contents of SGKeyCodes is nil");    
-		keyCodes = [[contents propertyList] retain];
-	}
-	
-	return keyCodes;
+        keyCodes = [contents propertyList];
+    }
+    
+    return keyCodes;
 }
 
 + (NSString*)_stringForKeyCode: (short)theKeyCode legacyKeyCodeMap: (NSDictionary*)theDictionary {
-	id key;
-	NSString *string;
-	
-	key = [NSString stringWithFormat:@"%d", theKeyCode];
-	string = [theDictionary objectForKey:key];
-	
-	if( !string )
-		string = [NSString stringWithFormat:@"%X", theKeyCode];
-	
-	return string;
+    id key;
+    NSString *string;
+    
+    key = [NSString stringWithFormat:@"%d", theKeyCode];
+    string = [theDictionary objectForKey:key];
+    
+    if( !string )
+        string = [NSString stringWithFormat:@"%X", theKeyCode];
+    
+    return string;
 }
 
 + (NSString*)_stringForKeyCode:(short)theKeyCode newKeyCodeMap:(NSDictionary*)theDictionary {
-	NSString *result;
-	NSString *keyCodeString;
-	NSDictionary *unmappedKeys;
-	NSArray *padKeys;
-	
-	keyCodeString = [NSString stringWithFormat: @"%d", theKeyCode];
-	
-	//Handled if its not handled by translator
-	unmappedKeys = [theDictionary objectForKey:@"unmappedKeys"];
-	result = [unmappedKeys objectForKey:keyCodeString];
-	if( result )
-		return result;
-	
-	//Translate it
-	result = [[[SGKeyCodeTranslator currentTranslator] translateKeyCode:theKeyCode] uppercaseString];
-	
-	//Handle if its a key-pad key
-	padKeys = [theDictionary objectForKey:@"padKeys"];  
-	if([padKeys indexOfObject:keyCodeString] != NSNotFound) {
+    NSString *result;
+    NSString *keyCodeString;
+    NSDictionary *unmappedKeys;
+    NSArray *padKeys;
+    
+    keyCodeString = [NSString stringWithFormat: @"%d", theKeyCode];
+    
+    //Handled if its not handled by translator
+    unmappedKeys = [theDictionary objectForKey:@"unmappedKeys"];
+    result = [unmappedKeys objectForKey:keyCodeString];
+    if( result )
+        return result;
+    
+    //Translate it
+    result = [[[SGKeyCodeTranslator currentTranslator] translateKeyCode:theKeyCode] uppercaseString];
+    
+    //Handle if its a key-pad key
+    padKeys = [theDictionary objectForKey:@"padKeys"];  
+    if([padKeys indexOfObject:keyCodeString] != NSNotFound) {
     result = [NSString stringWithFormat:@"%@ %@", [theDictionary objectForKey:@"padKeyString"], result];
-	}
-	
-	return result;
+    }
+    
+    return result;
 }
 
 + (NSString *)_stringForKeyCode:(short)theKeyCode {
-	NSDictionary *dict;
+    NSDictionary *dict;
   
-	dict = [self _keyCodesDictionary];
-	if([[dict objectForKey:@"version"] integerValue] <= 0)
-		return [self _stringForKeyCode:theKeyCode legacyKeyCodeMap:dict];
+    dict = [self _keyCodesDictionary];
+    if([[dict objectForKey:@"version"] integerValue] <= 0)
+        return [self _stringForKeyCode:theKeyCode legacyKeyCodeMap:dict];
   
-	return [self _stringForKeyCode:theKeyCode newKeyCodeMap:dict];
+    return [self _stringForKeyCode:theKeyCode newKeyCodeMap:dict];
 }
 
 - (NSString*)keyCodeString {
-	// special case: the modifiers for the "clear" key are 0x0
-	if ( [self isClearCombo] ) return @"";
-	
+    // special case: the modifiers for the "clear" key are 0x0
+    if ( [self isClearCombo] ) return @"";
+    
   return [[self class] _stringForKeyCode:self.keyCode];
 }
 
 - (NSUInteger)modifierMask {
-	// special case: the modifiers for the "clear" key are 0x0
-	if ([self isClearCombo]) return 0;
-	
-	static NSUInteger modToChar[4][2] =
-	{
-		{ cmdKey, 		NSCommandKeyMask },
-		{ optionKey,	NSAlternateKeyMask },
-		{ controlKey,	NSControlKeyMask },
-		{ shiftKey,		NSShiftKeyMask }
-	};
+    // special case: the modifiers for the "clear" key are 0x0
+    if ([self isClearCombo]) return 0;
+    
+    static NSUInteger modToChar[4][2] =
+    {
+        { cmdKey,         NSCommandKeyMask },
+        { optionKey,    NSAlternateKeyMask },
+        { controlKey,    NSControlKeyMask },
+        { shiftKey,        NSShiftKeyMask }
+    };
   
   NSUInteger i, ret = 0;
   
@@ -193,17 +193,17 @@ NSString * const kModifiersDictionaryKey = @"modifiers";
 }
 
 - (NSString *)description {
-	NSString *desc;
-	
-	if ([self isValidHotKeyCombo]) {
-		desc = [NSString stringWithFormat: @"%@%@",
+    NSString *desc;
+    
+    if ([self isValidHotKeyCombo]) {
+        desc = [NSString stringWithFormat: @"%@%@",
             [[self class] _stringForModifiers:self.modifiers],
             [[self class] _stringForKeyCode:self.keyCode]];
-	}
-	else {
+    }
+    else {
     desc = NSLocalizedString(@"(None)", @"Hot Keys: Key Combo text for 'empty' combo" );
-	}
+    }
   
-	return desc;
+    return desc;
 }
 @end

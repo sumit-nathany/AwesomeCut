@@ -18,7 +18,7 @@
 -(id) init
 {
     return [self initRemembering:20
-                displaying:10	
+                displaying:10    
                 withDisplayLength:40 ];
 }
 
@@ -26,7 +26,7 @@
         displaying:(int)nowDisplaying
         withDisplayLength:(int)displayLength
 {
-    [super init];
+    if (!(self = [super init])) return nil;
     jcList = [[NSMutableArray alloc] init];
     [self setRememberNum:nowRemembering];
     [self setDisplayNum:nowDisplaying];
@@ -41,17 +41,16 @@
     }
     // Clipping object
     FlycutClipping * newClipping;
-	// Create clipping
+    // Create clipping
     newClipping = [[FlycutClipping alloc] initWithContents:clipping
-												   withType:type
-										  withDisplayLength:[self displayLen]
-									   withAppLocalizedName:appLocalizedName
-										   withAppBundleURL:bundleURL
-											  withTimestamp:timestamp];
-	
-	[self addClipping:newClipping];
-	
-	[newClipping release];
+                                                   withType:type
+                                          withDisplayLength:[self displayLen]
+                                       withAppLocalizedName:appLocalizedName
+                                           withAppBundleURL:bundleURL
+                                              withTimestamp:timestamp];
+    
+    [self addClipping:newClipping];
+    
 }
 
 -(void) addClipping:(FlycutClipping*) clipping{
@@ -59,11 +58,11 @@
         [jcList removeObject:clipping];
     }
     // Push it onto our recent clippings stack
-	[jcList insertObject:clipping atIndex:0];
-	// Delete clippings older than jcRememberNum
-	while ( [jcList count] > jcRememberNum ) {
-		[jcList removeObjectAtIndex:jcRememberNum];
-	}
+    [jcList insertObject:clipping atIndex:0];
+    // Delete clippings older than jcRememberNum
+    while ( [jcList count] > jcRememberNum ) {
+        [jcList removeObjectAtIndex:jcRememberNum];
+    }
 }
 
 -(void) addClipping:(NSString *)clipping ofType:(NSString *)type withPBCount:(int *)pbCount
@@ -75,7 +74,6 @@
 -(void) clearList {
     NSMutableArray *emptyJCList;
     emptyJCList = [[NSMutableArray alloc] init];
-    [jcList release];
     jcList = emptyJCList;
 }
 
@@ -91,9 +89,9 @@
 
 -(void) clippingMoveToTop:(int)index
 {
-	FlycutClipping *clipping = [jcList objectAtIndex:index];
-	[jcList insertObject:clipping atIndex:0];
-	[jcList removeObjectAtIndex:index+1];
+    FlycutClipping *clipping = [jcList objectAtIndex:index];
+    [jcList insertObject:clipping atIndex:0];
+    [jcList removeObjectAtIndex:index+1];
 }
 
 // Set various values
@@ -101,9 +99,9 @@
 {
     if ( nowRemembering  > 0 ) {
         jcRememberNum = nowRemembering;
-		while ( [jcList count] > jcRememberNum ) {
-			[jcList removeObjectAtIndex:jcRememberNum];
-		}
+        while ( [jcList count] > jcRememberNum ) {
+            [jcList removeObjectAtIndex:jcRememberNum];
+        }
     }
 }
 
@@ -151,11 +149,11 @@
 
 -(NSString *) clippingContentsAtPosition:(int)index
 {
-	if ( index >= [jcList count] ) {
-		return nil;
-	} else {
-		return [NSString stringWithString:[[jcList objectAtIndex:index] contents]];
-	}
+    if ( index >= [jcList count] ) {
+        return nil;
+    } else {
+        return [NSString stringWithString:[[jcList objectAtIndex:index] contents]];
+    }
 }
 
 -(NSString *) clippingDisplayStringAtPosition:(int)index
@@ -166,7 +164,8 @@
 -(NSString *) clippingTypeAtPosition:(int)index
 {
     NSString *returnString;
-    returnString = [NSString stringWithString:[[jcList objectAtIndex:index] type]];
+    FlycutClipping *clipping = [jcList objectAtIndex:index];
+    returnString = [NSString stringWithString:[clipping type]];
 //    return [[jcList objectAtIndex:index] type];
     return returnString;
 }
@@ -175,7 +174,7 @@
 {
     NSRange theRange;
     NSArray *subArray;
-    NSMutableArray *returnArray = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *returnArray = [[NSMutableArray alloc] init];
     NSEnumerator *enumerator;
     FlycutClipping *aClipping;
     theRange.location = 0;
@@ -201,7 +200,7 @@
 {
     NSRange theRange;
     NSArray *subArray;
-    NSMutableArray *returnArray = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *returnArray = [[NSMutableArray alloc] init];
     NSEnumerator *enumerator;
     FlycutClipping *aClipping;
 
@@ -239,7 +238,7 @@
 -(NSArray *) previousIndexes:(int)howMany containing:(NSString*)search // This method is in newest-first order.
 {
     NSArray *subArray;
-    NSMutableArray *returnArray = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *returnArray = [[NSMutableArray alloc] init];
     NSEnumerator *enumerator;
     FlycutClipping *aClipping;
 
@@ -274,9 +273,7 @@
     jcDisplayLen = 0;
 
     // Free collections
-    [jcList release];
    
-    [super dealloc];
 }
 
 @end
