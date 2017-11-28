@@ -42,7 +42,7 @@
         @"stickyBezel",
         [NSNumber numberWithBool:NO],
         @"wraparoundBezel",
-        [NSNumber numberWithBool:NO],// No by default
+        [NSNumber numberWithBool:YES],// Yes by default
         @"loadOnStartup",
         [NSNumber numberWithBool:YES],
         @"menuSelectionPastes",

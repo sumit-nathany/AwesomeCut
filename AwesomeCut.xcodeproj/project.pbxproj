@@ -125,10 +125,10 @@
 		77A4F3AA139BD72300F39666 /* SGKeyCodeTranslator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGKeyCodeTranslator.m; sourceTree = "<group>"; };
 		77A4F3AB139BD72300F39666 /* SGKeyCombo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGKeyCombo.h; sourceTree = "<group>"; };
 		77A4F3AC139BD72300F39666 /* SGKeyCombo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGKeyCombo.m; sourceTree = "<group>"; };
-		77DA6B8E1CB9549B0077917F /* FlycutStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlycutStore.m; path = FlycutEngine/FlycutStore.m; sourceTree = SOURCE_ROOT; };
-		77DA6B8F1CB9549B0077917F /* FlycutStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlycutStore.h; path = FlycutEngine/FlycutStore.h; sourceTree = SOURCE_ROOT; };
-		77DA6B901CB9549B0077917F /* FlycutClipping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlycutClipping.m; path = FlycutEngine/FlycutClipping.m; sourceTree = SOURCE_ROOT; };
-		77DA6B911CB9549B0077917F /* FlycutClipping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlycutClipping.h; path = FlycutEngine/FlycutClipping.h; sourceTree = SOURCE_ROOT; };
+		77DA6B8E1CB9549B0077917F /* FlycutStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlycutStore.m; path = AwesomeCutEngine/FlycutStore.m; sourceTree = SOURCE_ROOT; };
+		77DA6B8F1CB9549B0077917F /* FlycutStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlycutStore.h; path = AwesomeCutEngine/FlycutStore.h; sourceTree = SOURCE_ROOT; };
+		77DA6B901CB9549B0077917F /* FlycutClipping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlycutClipping.m; path = AwesomeCutEngine/FlycutClipping.m; sourceTree = SOURCE_ROOT; };
+		77DA6B911CB9549B0077917F /* FlycutClipping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlycutClipping.h; path = AwesomeCutEngine/FlycutClipping.h; sourceTree = SOURCE_ROOT; };
 		8D1107320486CEB800E47090 /* AwesomeCut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AwesomeCut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D2E28821B0669F500AE62C8 /* com.generalarcade.flycut.black.16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = com.generalarcade.flycut.black.16.png; path = Resources/com.generalarcade.flycut.black.16.png; sourceTree = "<group>"; };
 		8D2E28831B0669F500AE62C8 /* com.generalarcade.flycut.black.32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = com.generalarcade.flycut.black.32.png; path = Resources/com.generalarcade.flycut.black.32.png; sourceTree = "<group>"; };
@@ -164,7 +164,7 @@
 				7761C896139BDEC4000FB3AB /* UKPrefsPanel */,
 				7761C889139BDEAF000FB3AB /* UI */,
 				7761C880139BDE94000FB3AB /* LoginItem */,
-				7761C877139BDE7F000FB3AB /* FlycutEngine */,
+				7761C877139BDE7F000FB3AB /* AwesomeCutEngine */,
 				77A4F3A4139BD72300F39666 /* SGHotKeysLib */,
 			);
 			name = Classes;
@@ -255,7 +255,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7761C877139BDE7F000FB3AB /* FlycutEngine */ = {
+		7761C877139BDE7F000FB3AB /* AwesomeCutEngine */ = {
 			isa = PBXGroup;
 			children = (
 				77DA6B8E1CB9549B0077917F /* FlycutStore.m */,
@@ -263,8 +263,7 @@
 				77DA6B901CB9549B0077917F /* FlycutClipping.m */,
 				77DA6B911CB9549B0077917F /* FlycutClipping.h */,
 			);
-			name = FlycutEngine;
-			path = JumpcutEngine;
+			path = AwesomeCutEngine;
 			sourceTree = "<group>";
 		};
 		7761C880139BDE94000FB3AB /* LoginItem */ = {
